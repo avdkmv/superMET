@@ -1,10 +1,19 @@
 package com.unn.service.impl;
 
-import com.unn.model.Document;
-import com.unn.service.IDocumentService;
 import java.util.Optional;
 
+import com.unn.model.Document;
+import com.unn.repository.DocumentRepo;
+import com.unn.service.IDocumentService;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class DocumentService implements IDocumentService {
+  private final DocumentRepo documentRepo;
 
   @Override
   public Optional<Document> createDocument(

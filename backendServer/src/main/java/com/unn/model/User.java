@@ -1,6 +1,7 @@
 package com.unn.model;
 
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,12 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,19 +49,7 @@ public class User {
     orphanRemoval = true
   )
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private Set<Document> documentId;
-
-  /**
-   * TODO: check for one to zero or one
-   */
-  @OneToMany(
-    fetch = FetchType.EAGER,
-    mappedBy = "userId",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true
-  )
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  private Set<Doctor> doctorId;
+  private Set<Doctor> doctorIds;
 
   @OneToMany(
     fetch = FetchType.EAGER,
@@ -67,7 +58,14 @@ public class User {
     orphanRemoval = true
   )
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private Set<Patient> patientId;
+  private Set<Patient> patientIds;
 
-
+  @OneToMany(
+    fetch = FetchType.EAGER,
+    mappedBy = "userId",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<Message> messageIds;
 }

@@ -2,12 +2,12 @@ package com.unn.controller;
 
 import com.unn.service.impl.ChatService;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
 @RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {

@@ -1,8 +1,10 @@
 package com.unn.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,10 +16,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +36,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "s_doctor")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Doctor {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,14 +50,25 @@ public class Doctor {
   @NotFound(action=NotFoundAction.IGNORE)
   private Calendar calendarId;
 
-  private Long documentId;
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private List<Long> documentId;
 
   @OneToMany(
     fetch = FetchType.EAGER,
-    mappedBy = "documentId",
+    mappedBy = "doctorId",
     cascade = CascadeType.ALL,
     orphanRemoval = true
   )
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private Set<Document> resourceIds;
+  private Set<Appointment> appointmentIds;
+
+  @OneToMany(
+    fetch = FetchType.EAGER,
+    mappedBy = "doctorId",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<Appointment> chatIds;
 }

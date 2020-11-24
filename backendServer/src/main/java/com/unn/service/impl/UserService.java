@@ -1,13 +1,27 @@
 package com.unn.service.impl;
 
-import com.unn.model.User;
-import com.unn.service.IUserService;
 import java.util.Optional;
 
+import com.unn.model.User;
+import com.unn.repository.UserRepo;
+import com.unn.service.IUserService;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class UserService implements IUserService {
+  private final UserRepo userRepo;
 
   @Override
-  public Optional<User> createUser() {
+  public Optional<User> createUser(
+    Long userTypeId,
+    String username,
+    String password,
+    String mail
+  ) {
     // TODO:  implement method
     return null;
   }
@@ -37,8 +51,12 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public Optional<User> updateUser() {
-    // TODO:  implement method
+  public Optional<User> updateUser(
+    String username,
+    String password,
+    String mail
+  ) {
+    // TODO Auto-generated method stub
     return null;
   }
 }

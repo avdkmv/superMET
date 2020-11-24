@@ -1,9 +1,16 @@
 package com.unn.service.impl;
 
-import com.unn.model.Document;
-import com.unn.service.IMetricsService;
 import java.util.Optional;
 
+import com.unn.model.Document;
+import com.unn.service.IMetricsService;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class MetricsService implements IMetricsService {
 
   @Override

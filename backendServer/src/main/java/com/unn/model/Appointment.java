@@ -3,9 +3,12 @@ package com.unn.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -24,13 +27,17 @@ public class Appointment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Long patientId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "patient_id")
+  private Patient patientId;
 
-  private Long doctorId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "doctor_id")
+  private Doctor doctorId;
 
   private Long resultId;
 
   private Date date;
 
-  private Long uId;
+  private Long code;
 }

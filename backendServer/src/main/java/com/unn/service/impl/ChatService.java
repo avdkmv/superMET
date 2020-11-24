@@ -1,12 +1,21 @@
 package com.unn.service.impl;
 
-import com.unn.model.Chat;
-import com.unn.model.Message;
-import com.unn.service.IChatService;
 import java.util.Optional;
 
-public class ChatService implements IChatService {
+import com.unn.model.Chat;
+import com.unn.model.Message;
+import com.unn.repository.ChatRepo;
+import com.unn.service.IChatService;
 
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ChatService implements IChatService {
+  private final ChatRepo chatRepo;
+  
   @Override
   public Optional<Chat> createChat(Long patientId, Long doctorId) {
     // TODO:  implement method

@@ -2,6 +2,12 @@ package com.unn.service.impl;
 
 import com.unn.service.IAuthService;
 
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class AuthService implements IAuthService {
 
   @Override

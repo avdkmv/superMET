@@ -6,6 +6,12 @@ import com.unn.model.Message;
 import com.unn.model.User;
 import com.unn.service.IValidationService;
 
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class ValidationService implements IValidationService {
 
   @Override
