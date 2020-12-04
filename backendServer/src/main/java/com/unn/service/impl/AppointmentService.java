@@ -3,7 +3,7 @@ package com.unn.service.impl;
 import java.util.Optional;
 
 import com.unn.model.Appointment;
-import com.unn.repository.ApppointmentRepo;
+import com.unn.repository.AppointmentRepo;
 import com.unn.service.IAppointmentService;
 
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AppointmentService implements IAppointmentService {
-  private final ApppointmentRepo appointmentRepo;
+  private final AppointmentRepo appointmentRepo;
 
   @Override
   public Optional<Appointment> createAppointment(
