@@ -24,10 +24,11 @@ hs_err_pid*
 
 # backend server
 
-backendServer/.idea
-backendServer/.settings
-backendServer/.vscode
-backendServer/.classpath
-backendServer/.factorypath
-backendServer/.project
-backendServer/target/*
+backend-server/.idea
+backend-server/.settings
+backend-server/.vscode
+backend-server/.classpath
+backend-server/.factorypath
+backend-server/backend-server.iml
+backend-server/.project
+backend-server/target/*
