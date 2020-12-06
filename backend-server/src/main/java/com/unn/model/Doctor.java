@@ -70,5 +70,5 @@ public class Doctor {
     orphanRemoval = true
   )
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private Set<Appointment> chatIds;
+  private Set<Chat> chatIds;
 }

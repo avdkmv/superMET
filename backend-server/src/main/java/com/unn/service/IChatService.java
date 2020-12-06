@@ -11,7 +11,7 @@ public interface IChatService {
   Optional<Chat> findChat(Long patientId, Long doctorId);
   Optional<Chat> findChat(Long chatId);
 
-  Optional<Chat> deleteChat(Long chatId);
+  void deleteChat(Long chatId);
 
-  void newMessage(Long chatId, Message message);
+  boolean newMessage(Long chatId, Message message);
 }

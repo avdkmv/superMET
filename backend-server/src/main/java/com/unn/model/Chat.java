@@ -46,4 +46,9 @@ public class Chat {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private Map<Long, Message> messageHistory;
+
+  public Chat(Doctor doctor, Patient patient) {
+    this.doctorId = doctor;
+    this.patientId = patient;
+  }
 }
