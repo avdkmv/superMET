@@ -15,8 +15,8 @@ public interface IUserService {
   Optional<User> findUser(String mail);
   Optional<User> findUser(Long id);
 
-  Optional<User> deleteUser(String mail);
-  Optional<User> deleteUser(Long id);
+  boolean deleteUser(String mail);
+  boolean deleteUser(Long id);
 
-  Optional<User> updateUser(String username, String password, String mail);
+  boolean updateUser(String username, String password, String mail);
 }

@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -33,13 +32,10 @@ public class User {
 
   private Long userTypeId;
 
-  @Size(min = 3, max = 15, message = "Username size must be 3 to 15 symbols.")
   private String username;
 
-  @Size(min = 5, max = 65, message = "Password size must be 6 to 65 symbols.")
   private String password;
 
-  @Size(min = 5, max = 65, message = "Mail size must be 6 to 65 symbols.")
   private String mail;
 
   @OneToMany(
@@ -68,4 +64,11 @@ public class User {
   )
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Set<Message> messageIds;
+
+  public User(Long userTypeId, String username, String password, String mail) {
+    this.userTypeId = userTypeId;
+    this.username = username;
+    this.password = password;
+    this.mail = mail;
+  }
 }

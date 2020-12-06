@@ -22,41 +22,53 @@ public class UserService implements IUserService {
     String password,
     String mail
   ) {
-    // TODO:  implement method
-    return null;
+    User user = new User(userTypeId, username, password, mail);
+    userRepo.save(user);
+    return Optional.of(user);
   }
 
   @Override
   public Optional<User> findUser(String mail) {
-    // TODO:  implement method
-    return null;
+    return userRepo.findByMail(mail);
   }
 
   @Override
   public Optional<User> findUser(Long id) {
-    // TODO:  implement method
-    return null;
+    return userRepo.findById(id);
   }
 
   @Override
-  public Optional<User> deleteUser(String mail) {
-    // TODO:  implement method
-    return null;
+  public boolean deleteUser(String mail) {
+    Optional<User> user = userRepo.findByMail(mail);
+    if (user.isPresent()) {
+      userRepo.delete(user.get());
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
-  public Optional<User> deleteUser(Long id) {
-    // TODO:  implement method
-    return null;
+  public boolean deleteUser(Long id) {
+    Optional<User> user = userRepo.findById(id);
+    if (user.isPresent()) {
+      userRepo.delete(user.get());
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
-  public Optional<User> updateUser(
-    String username,
-    String password,
-    String mail
-  ) {
-    // TODO Auto-generated method stub
-    return null;
+  public boolean updateUser(String username, String password, String mail) {
+    Optional<User> user = userRepo.findByMail(mail);
+    if (user.isPresent()) {
+      user.get().setUsername(username);
+      user.get().setPassword(password);
+      userRepo.save(user.get());
+      return true;
+    } else {
+      return false;
+    }
   }
 }
