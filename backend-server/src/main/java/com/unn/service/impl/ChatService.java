@@ -32,9 +32,7 @@ public class ChatService implements IChatService {
 
   @Override
   public Optional<Chat> findChat(Long patientId, Long doctorId) {
-    Optional<Patient> patient = patientRepo.findById(patientId);
-    Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-    return chatRepo.findByDoctorIdAndPatientId(doctor.get(), patient.get());
+    return chatRepo.findByDoctorIdAndPatientId(doctorId, patientId);
   }
 
   @Override

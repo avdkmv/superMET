@@ -42,9 +42,7 @@ public class AppointmentService implements IAppointmentService {
 
   @Override
   public Optional<Appointment> findAppointment(Long doctorId, Long patientId) {
-    Optional<Patient> patient = patientRepo.findById(patientId);
-    Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-    return appointmentRepo.findByDoctorIdAndPatientId(doctor.get(), patient.get());
+    return appointmentRepo.findByDoctorIdAndPatientId(doctorId, patientId);
   }
   
   @Override
@@ -57,9 +55,6 @@ public class AppointmentService implements IAppointmentService {
     Long doctorId,
     Long patientId
   ) {
-  // WA: this implementation doesnt remove entity
-  // Optional<Appointment> appointment = findAppointment(doctorId, patientId);
-  // appointmentRepo.deleteById(appointment.get().getId());
     appointmentRepo.deleteByDoctorIdAndPatientId(doctorId, patientId);
   }
 

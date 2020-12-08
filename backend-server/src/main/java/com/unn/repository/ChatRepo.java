@@ -12,5 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepo extends JpaRepository<Chat, Long> {
-    Optional<Chat> findByDoctorIdAndPatientId(Doctor doctorId, Patient patientId);
+    Optional<Chat> findByDoctorIdAndPatientId(Long doctorId, Long patientId);
 }

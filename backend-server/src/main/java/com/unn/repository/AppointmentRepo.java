@@ -14,10 +14,8 @@ import java.util.Optional;
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
-    Optional<Appointment> findByDoctorIdAndPatientId(Doctor doctorId, Patient patientId);
+    Optional<Appointment> findByDoctorIdAndPatientId(Long doctorId, Long patientId);
 
-    @Modifying
     @Transactional
-    @Query(value="delete from Appointment a where a.doctorId.id = ?1 and a.patientId.id = ?2")
     void deleteByDoctorIdAndPatientId(Long doctorId, Long patientId);
 }

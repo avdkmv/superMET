@@ -43,7 +43,7 @@ public class Appointment {
   private Long code;
 
   public Appointment(Doctor doctor, Patient patient) {
-    this.doctorId = doctor;
-    this.patientId = patient;
+    this.doctor = doctor;
+    this.patient = patient;
   }
 }
