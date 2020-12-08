@@ -1,11 +1,26 @@
 $primary-color: #8075ff;
+$primary-color-darker: #6320ee;
 $secondary-color: #e9cff2;
 $secondary-color-lighter: lighten(#e9cff2, 30%);
 $muted-color: adjust-color(#495057, $alpha: -0.5);
+$buff-color: #f5dd90;
+$success-color: #328b66;
 
 $theme-colors: (
     "primary": $primary-color,
+    "success": $success-color,
+    "secondary": $secondary-color,
 );
 
 @import "~bootstrap/scss/bootstrap";
-@import '~ngx-toastr/toastr-bs4-alert';
+@import "~ngx-toastr/toastr-bs4-alert";
+
+.toast-success {
+    background-image: url(svg-encode(
+        svg-factory(
+            theme-color-level("primary", 6),
+            "0 0 512 512",
+            "M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+        )
+    ));
+}

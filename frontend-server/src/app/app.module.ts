@@ -1,18 +1,19 @@
-import { BrowserModule } from "@angular/platform-browser"
-import { NgModule } from "@angular/core"
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
 
-import { AppRoutingModule } from "./app-routing.module"
-import { AppComponent } from "./app.component"
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
-import { TestComponent } from "./pages/test/test.component"
-import { HeaderComponent } from "./components/header/header.component"
-import { FooterComponent } from "./components/footer/footer.component"
-import { UsersComponent } from "./pages/test/users/users.component"
-import { LoginFormComponent } from "./components/login-form/login-form.component"
-import { ReactiveFormsModule } from "@angular/forms"
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
-import { ToastrModule } from "ngx-toastr"
-import { CookieService } from "ngx-cookie-service"
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { TestComponent } from "./pages/test/test.component";
+import { HeaderComponent } from "./components/header/header.component";
+import { FooterComponent } from "./components/footer/footer.component";
+import { UsersComponent } from "./pages/test/users/users.component";
+import { LoginFormComponent } from "./components/login-form/login-form.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ToastrModule } from "ngx-toastr";
+import { CookieService } from "ngx-cookie-service";
+import { AppointmentsComponent } from './components/appointments/appointments.component';
 
 @NgModule({
     declarations: [
@@ -23,13 +24,16 @@ import { CookieService } from "ngx-cookie-service"
         UsersComponent,
         LoginFormComponent,
         LoginFormComponent,
+        AppointmentsComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({
+            preventDuplicates: true,
+        }),
         NgbModule,
     ],
     providers: [CookieService],
