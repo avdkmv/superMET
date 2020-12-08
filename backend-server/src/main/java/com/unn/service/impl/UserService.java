@@ -28,6 +28,11 @@ public class UserService implements IUserService {
   }
 
   @Override
+  public void addUser(User user) {
+    userRepo.save(user);
+  }
+
+  @Override
   public Optional<User> findUser(String mail) {
     return userRepo.findByMail(mail);
   }

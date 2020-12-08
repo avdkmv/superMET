@@ -19,4 +19,6 @@ public interface IUserService {
   boolean deleteUser(Long id);
 
   boolean updateUser(String username, String password, String mail);
+
+  public void addUser(User user);
 }
