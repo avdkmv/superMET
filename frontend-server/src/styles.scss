@@ -1,0 +1,11 @@
+$primary-color: #8075ff;
+$secondary-color: #e9cff2;
+$secondary-color-lighter: lighten(#e9cff2, 30%);
+$muted-color: adjust-color(#495057, $alpha: -0.5);
+
+$theme-colors: (
+    "primary": $primary-color,
+);
+
+@import "~bootstrap/scss/bootstrap";
+@import '~ngx-toastr/toastr-bs4-alert';
