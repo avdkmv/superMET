@@ -3,22 +3,24 @@ package com.unn.service;
 import java.util.Optional;
 
 import com.unn.model.Document;
+import com.unn.model.Resource;
 
 public interface IDocumentService {
   Optional<Document> createDocument(
-    Long documentId,
     String number,
-    String description
+    String description,
+    Long resourceId
   );
 
   Optional<Document> findDocument(Long documentId);
   Optional<Document> findDocumentByResourceId(Long resourceId);
 
-  Optional<Document> updateDocument(
+  boolean updateDocument(
     Long documentId,
     String number,
-    String description
+    String description,
+    Resource resource
   );
 
-  Optional<Document> deleteDocument(Long documentId);
+  boolean deleteDocument(Long documentId);
 }
