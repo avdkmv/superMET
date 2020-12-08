@@ -34,4 +34,14 @@ public class Document {
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "resource_id", referencedColumnName = "id")
   private Resource resourceId;
+
+  public Document(
+    String number,
+    String description,
+    Resource resourceId
+  ) {
+    this.number = number;
+    this.description = description;
+    this.resourceId = resourceId;
+  }
 }
