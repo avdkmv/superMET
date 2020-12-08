@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core"
+import { CookieService } from 'ngx-cookie-service'
 import { Subject } from 'rxjs'
 
 @Injectable({
@@ -10,7 +11,7 @@ export class MessagingService {
 
     loginMessage$ = this.loginMessageSource.asObservable()
 
-    constructor() {}
+    constructor(private cookie: CookieService) {}
 
     login() {
         this.loginMessageSource.next(true)
