@@ -36,7 +36,7 @@ public class Calendar {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "doctor_id", referencedColumnName = "id")
-  private Doctor doctorId;
+  private Doctor doctor;
 
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")

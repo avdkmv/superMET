@@ -44,19 +44,19 @@ public class Doctor {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
-  private User userId;
+  private User user;
 
-  @OneToOne(mappedBy = "doctorId")
+  @OneToOne(mappedBy = "doctor")
   @NotFound(action=NotFoundAction.IGNORE)
-  private Calendar calendarId;
+  private Calendar calendar;
 
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
-  private List<Long> documentId;
+  private List<Long> documentIds;
 
   @OneToMany(
     fetch = FetchType.EAGER,
-    mappedBy = "doctorId",
+    mappedBy = "doctor",
     cascade = CascadeType.ALL,
     orphanRemoval = true
   )
@@ -65,7 +65,7 @@ public class Doctor {
 
   @OneToMany(
     fetch = FetchType.EAGER,
-    mappedBy = "doctorId",
+    mappedBy = "doctor",
     cascade = CascadeType.ALL,
     orphanRemoval = true
   )

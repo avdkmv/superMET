@@ -40,7 +40,7 @@ public class User {
 
   @OneToMany(
     fetch = FetchType.EAGER,
-    mappedBy = "userId",
+    mappedBy = "user",
     cascade = CascadeType.ALL,
     orphanRemoval = true
   )
@@ -49,7 +49,7 @@ public class User {
 
   @OneToMany(
     fetch = FetchType.EAGER,
-    mappedBy = "userId",
+    mappedBy = "user",
     cascade = CascadeType.ALL,
     orphanRemoval = true
   )
@@ -58,7 +58,7 @@ public class User {
 
   @OneToMany(
     fetch = FetchType.EAGER,
-    mappedBy = "userId",
+    mappedBy = "user",
     cascade = CascadeType.ALL,
     orphanRemoval = true
   )
