@@ -4,21 +4,17 @@ import java.util.Optional;
 
 import com.unn.model.User;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 public interface IUserService {
-  Optional<User> createUser(
-    Long userTypeId,
-    String username,
-    String password,
-    String mail
-  );
+  Optional<User> createUser(User user);
 
-  Optional<User> findUser(String mail);
-  Optional<User> findUser(Long id);
+  ResponseEntity<User> findUser(String mail);
+  ResponseEntity<User> findUser(Long id);
 
-  boolean deleteUser(String mail);
-  boolean deleteUser(Long id);
+  HttpStatus deleteUser(String mail);
+  HttpStatus deleteUser(Long id);
 
-  boolean updateUser(String username, String password, String mail);
-
-  public void addUser(User user);
+  void updateUser(User user);
 }

@@ -6,6 +6,8 @@ import com.unn.model.User;
 import com.unn.repository.UserRepo;
 import com.unn.service.IUserService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -16,64 +18,58 @@ public class UserService implements IUserService {
   private final UserRepo userRepo;
 
   @Override
-  public Optional<User> createUser(
-    Long userTypeId,
-    String username,
-    String password,
-    String mail
-  ) {
-    User user = new User(userTypeId, username, password, mail);
+  public Optional<User> createUser(User user) {
     userRepo.save(user);
     return Optional.of(user);
   }
 
   @Override
-  public void addUser(User user) {
-    userRepo.save(user);
-  }
-
-  @Override
-  public Optional<User> findUser(String mail) {
-    return userRepo.findByMail(mail);
-  }
-
-  @Override
-  public Optional<User> findUser(Long id) {
-    return userRepo.findById(id);
-  }
-
-  @Override
-  public boolean deleteUser(String mail) {
+  public ResponseEntity<User> findUser(String mail) {
     Optional<User> user = userRepo.findByMail(mail);
     if (user.isPresent()) {
-      userRepo.delete(user.get());
-      return true;
+      return ResponseEntity.ok(user.get());
     } else {
-      return false;
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
   }
 
   @Override
-  public boolean deleteUser(Long id) {
+  public ResponseEntity<User> findUser(Long id) {
+    Optional<User> user = userRepo.findById(id);
+    if (user.isPresent()) {
+      return ResponseEntity.ok(user.get());
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+  }
+
+  @Override
+  public HttpStatus deleteUser(String mail) {
+    Optional<User> user = userRepo.findByMail(mail);
+    if (user.isPresent()) {
+      userRepo.delete(user.get());
+      return HttpStatus.OK;
+    } else {
+      return HttpStatus.NOT_FOUND;
+    }
+  }
+
+  @Override
+  public HttpStatus deleteUser(Long id) {
     Optional<User> user = userRepo.findById(id);
     if (user.isPresent()) {
       userRepo.delete(user.get());
-      return true;
+      return HttpStatus.OK;
     } else {
-      return false;
+      return HttpStatus.NOT_FOUND;
     }
   }
 
   @Override
-  public boolean updateUser(String username, String password, String mail) {
-    Optional<User> user = userRepo.findByMail(mail);
-    if (user.isPresent()) {
-      user.get().setUsername(username);
-      user.get().setPassword(password);
-      userRepo.save(user.get());
-      return true;
-    } else {
-      return false;
-    }
+  public void updateUser(User user) {
+    Optional<User> updatedUser = userRepo.findByMail(user.getMail());
+    updatedUser.get().setUsername(user.getUsername());
+    updatedUser.get().setPassword(user.getPassword());
+    userRepo.save(updatedUser.get());
   }
 }

@@ -4,6 +4,7 @@ import com.unn.model.Appointment;
 import com.unn.model.Document;
 import com.unn.model.Message;
 import com.unn.model.User;
+import com.unn.repository.UserRepo;
 import com.unn.service.IValidationService;
 
 import org.springframework.stereotype.Service;
@@ -16,12 +17,10 @@ import lombok.RequiredArgsConstructor;
 public class ValidationService implements IValidationService {
   private final int USER_PARAMS_SIZE = 127;
 
-  /**
-   * will be updated
-   */
+  private final UserRepo userRepo;
 
   @Override
-  public boolean validateUser(User user) {
+  public boolean validateUserCreation(User user) {
     return (
       user.getUserTypeId() != null &&
       isStringParamsValid(
@@ -29,7 +28,20 @@ public class ValidationService implements IValidationService {
         user.getUsername(),
         user.getPassword(),
         user.getMail()
-      )
+      ) &&
+      userRepo.findByMail(user.getMail()).isEmpty()
+    );
+  }
+
+  @Override
+  public boolean validateUserUpdate(User user) {
+    return (
+      isStringParamsValid(
+        USER_PARAMS_SIZE,
+        user.getUsername(),
+        user.getPassword()
+      ) &&
+      userRepo.findByMail(user.getMail()).isPresent()
     );
   }
 
@@ -52,13 +64,11 @@ public class ValidationService implements IValidationService {
   }
 
   private boolean isStringParamsValid(int allowedSize, String... params) {
-    boolean check = true;
     for (String param : params) {
       if (StringUtils.isEmpty(param) || param.length() > allowedSize) {
-        check = false;
-        break;
+        return false;
       }
     }
-    return check;
+    return true;
   }
 }
