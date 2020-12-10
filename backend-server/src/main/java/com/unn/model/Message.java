@@ -31,7 +31,7 @@ public class Message {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "sender_id")
-  private User userId;
+  private User user;
 
   private Date date;
 }

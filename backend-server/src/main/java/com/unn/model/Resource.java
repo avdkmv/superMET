@@ -27,6 +27,6 @@ public class Resource {
 
   private String link;
 
-  @OneToOne(mappedBy = "resourceId")
-  private Document documentId;
+  @OneToOne(mappedBy = "resource")
+  private Document document;
 }

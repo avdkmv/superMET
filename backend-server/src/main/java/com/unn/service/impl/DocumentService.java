@@ -33,8 +33,7 @@ public class DocumentService implements IDocumentService {
 
   @Override
   public Optional<Document> findDocumentByResourceId(Long resourceId) {
-    Optional<Resource> resource = resourceRepo.findById(resourceId);
-    return documentRepo.findDocumentByResourceId(resource.get());
+    return documentRepo.findDocumentByResourceId(resourceId);
   }
 
   @Override
@@ -43,7 +42,7 @@ public class DocumentService implements IDocumentService {
     if (document.isPresent()) {
       document.get().setNumber(number);
       document.get().setDescription(description);
-      document.get().setResourceId(resource);
+      document.get().setResource(resource);
       documentRepo.save(document.get());
       return true;
     } else {

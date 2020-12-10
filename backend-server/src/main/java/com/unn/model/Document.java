@@ -33,15 +33,15 @@ public class Document {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "resource_id", referencedColumnName = "id")
-  private Resource resourceId;
+  private Resource resource;
 
   public Document(
     String number,
     String description,
-    Resource resourceId
+    Resource resource
   ) {
     this.number = number;
     this.description = description;
-    this.resourceId = resourceId;
+    this.resource = resource;
   }
 }
