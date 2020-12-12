@@ -42,8 +42,11 @@ public class Appointment {
 
   private Long code;
 
+  private boolean busy;
+
   public Appointment(Doctor doctor, Patient patient) {
     this.doctor = doctor;
     this.patient = patient;
+    this.busy = false;
   }
 }

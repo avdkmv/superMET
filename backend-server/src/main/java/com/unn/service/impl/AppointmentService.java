@@ -1,5 +1,6 @@
 package com.unn.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.unn.model.Appointment;
@@ -72,5 +73,25 @@ public class AppointmentService implements IAppointmentService {
   ) {
     // TODO:  implement method
     return null;
+  }
+
+  @Override
+  public Optional<List<Appointment>> findAllBusyDoctorAppointment(Long doctorId) {
+    return appointmentRepo.findAllByDoctorIdAndBusy(doctorId, true);
+  }
+
+  @Override
+  public Optional<List<Appointment>> findAllFreeDoctorAppointment(Long doctorId) {
+    return appointmentRepo.findAllByDoctorIdAndBusy(doctorId, false);
+  }
+
+  @Override
+  public Optional<List<Appointment>> findAllBusyPatientAppointment(Long patientId) {
+    return appointmentRepo.findAllByPatientIdAndBusy(patientId, true);
+  }
+
+  @Override
+  public Optional<List<Appointment>> findAllFreePatientAppointment(Long patientId) {
+    return appointmentRepo.findAllByPatientIdAndBusy(patientId, false);
   }
 }
