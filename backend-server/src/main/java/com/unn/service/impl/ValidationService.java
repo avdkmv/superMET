@@ -1,7 +1,12 @@
 package com.unn.service.impl;
 
 import com.unn.constants.Constant;
-import com.unn.model.*;
+
+import com.unn.model.Chat;
+import com.unn.model.Appointment;
+import com.unn.model.Document;
+import com.unn.model.Message;
+import com.unn.model.User;
 import com.unn.repository.AppointmentRepo;
 import com.unn.repository.DoctorRepo;
 import com.unn.repository.PatientRepo;

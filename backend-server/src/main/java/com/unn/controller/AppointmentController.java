@@ -6,9 +6,15 @@ import com.unn.service.impl.AppointmentService;
 import com.unn.service.impl.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -30,7 +36,7 @@ public class AppointmentController {
     }
   }
 
-  @GetMapping("/appointment/{doctorId}/{patientId}")
+  @GetMapping("/doctor/{doctorId}/patient/{patientId}")
   public ResponseEntity<Appointment> getAppointment(@PathVariable(name = "doctorId") Long doctorId,
                                                     @PathVariable(name = "patientId") Long patientId) {
     Optional<Appointment> appointment = appointmentService.findAppointment(doctorId, patientId);
@@ -51,7 +57,7 @@ public class AppointmentController {
     }
   }
 
-  @DeleteMapping("/appointment/{doctorId}/{patientId}/delete")
+  @DeleteMapping("/doctor/{doctorId}/patient/{patientId}/delete")
   public ResponseEntity<Appointment> deleteAppointment(@PathVariable(name = "doctorId") Long doctorId,
                                                        @PathVariable(name = "patientId") Long patientId) {
     Optional<Appointment> appointment = appointmentService.deleteAppointment(doctorId, patientId);

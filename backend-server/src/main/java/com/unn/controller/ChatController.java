@@ -7,9 +7,15 @@ import com.unn.service.impl.ChatService;
 import com.unn.service.impl.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -31,7 +37,7 @@ public class ChatController {
     }
   }
 
-  @GetMapping("/chat/{doctorId}/{patientId}")
+  @GetMapping("/doctor/{doctorId}/patient/{patientId}")
   public ResponseEntity<Chat> getChat(@PathVariable(name = "doctorId") Long doctorId,
                                       @PathVariable(name = "patientId") Long patientId) {
     Optional<Chat> chat = chatService.findChat(doctorId, patientId);
@@ -62,7 +68,7 @@ public class ChatController {
     }
   }
 
-  @GetMapping("/chat/{id}/add_message/{message}")
+  @GetMapping("{id}/add_message/{message}")
   public ResponseEntity<Chat> addMessage(@PathVariable(name = "id") Long chatId,
                                          @PathVariable(name = "message") Message message) {
     Optional<Chat> chat = chatService.findChat(chatId);
