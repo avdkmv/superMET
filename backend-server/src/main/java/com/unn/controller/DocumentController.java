@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class DocumentController {
 
   @PostMapping("/add")
   public ResponseEntity<Document> addDocument(
-    @RequestParam Document document,
+    @RequestBody Document document,
     @RequestParam(name = "resource", required = false) MultipartFile resource
   ) {
     if (validationService.validateDocumentCreate(document)) {

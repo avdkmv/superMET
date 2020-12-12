@@ -49,7 +49,7 @@ public class DocumentService implements IDocumentService {
 
   @Override
   public Optional<Document> findDocumentByResourceId(Long resourceId) {
-    return documentRepo.findDocumentByResourceId(resourceId);
+    return documentRepo.findByResourceId(resourceId);
   }
 
   @Override

@@ -74,7 +74,7 @@ public class ValidationService implements IValidationService {
     if (document != null) {
     return isStringParamsValid(Constant.DOCUMENT_NUMBER_SIZE, document.getNumber())
       && isStringParamsValid(Constant.DESCRIPTION_SIZE, document.getDescription())
-      && documentRepo.findById(document.getId()).isEmpty();
+      && documentRepo.findByNumber(document.getNumber()).isEmpty();
     } else {
       return false;
     }
