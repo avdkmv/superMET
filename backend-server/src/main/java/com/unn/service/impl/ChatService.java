@@ -18,20 +18,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChatService implements IChatService {
   private final ChatRepo chatRepo;
-  private final DoctorRepo doctorRepo;
-  private final PatientRepo patientRepo;
   
   @Override
-  public Optional<Chat> createChat(Long patientId, Long doctorId) {
-    Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-    Optional<Patient> patient = patientRepo.findById(patientId);
-    Chat chat = new Chat(doctor.get(), patient.get());
+  public Optional<Chat> createChat(Chat chat) {
     chatRepo.save(chat);
     return Optional.of(chat);
   }
 
   @Override
-  public Optional<Chat> findChat(Long patientId, Long doctorId) {
+  public Optional<Chat> findChat(Long doctorId, Long patientId) {
     return chatRepo.findByDoctorIdAndPatientId(doctorId, patientId);
   }
 
@@ -41,12 +36,15 @@ public class ChatService implements IChatService {
   }
 
   @Override
-  public void deleteChat(Long chatId) {
-    chatRepo.deleteById(chatId);
+  public Optional<Chat> deleteChat(Long chatId) {
+    Optional<Chat> chat = chatRepo.findById(chatId);
+    if (chat.isPresent())
+      chatRepo.deleteById(chatId);
+    return chat;
   }
 
   @Override
-  public boolean newMessage(Long chatId, Message message) {
+  public Optional<Chat> newMessage(Long chatId, Message message) {
     Optional<Chat> chat = chatRepo.findById(chatId);
     if (chat.isPresent() && message != null) {
       if (chat.get().getMessageHistory() == null) {
@@ -54,8 +52,7 @@ public class ChatService implements IChatService {
       }
       chat.get().getMessageHistory().put(message.getId(), message);
       chatRepo.save(chat.get());
-      return true;
     }
-    return false;
+    return chat;
   }
 }

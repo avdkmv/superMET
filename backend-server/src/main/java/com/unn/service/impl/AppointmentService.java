@@ -24,13 +24,7 @@ public class AppointmentService implements IAppointmentService {
   private final PatientRepo patientRepo;
 
   @Override
-  public Optional<Appointment> createAppointment(
-    Long doctorId,
-    Long patientId
-  ) {
-    Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-    Optional<Patient> patient = patientRepo.findById(patientId);
-    Appointment appointment = new Appointment(doctor.get(), patient.get());
+  public Optional<Appointment> createAppointment(Appointment appointment) {
     appointmentRepo.save(appointment);
     return Optional.of(appointment);
   }
@@ -46,16 +40,22 @@ public class AppointmentService implements IAppointmentService {
   }
   
   @Override
-  public void deleteAppointment(Long appointmentId) {
-    appointmentRepo.deleteById(appointmentId);
+  public Optional<Appointment> deleteAppointment(Long appointmentId) {
+    Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
+    if (appointment.isPresent())
+      appointmentRepo.deleteById(appointmentId);
+    return appointment;
   }
 
   @Override
-  public void deleteAppointment(
+  public Optional<Appointment> deleteAppointment(
     Long doctorId,
     Long patientId
   ) {
-    appointmentRepo.deleteByDoctorIdAndPatientId(doctorId, patientId);
+    Optional<Appointment> appointment = appointmentRepo.findByDoctorIdAndPatientId(doctorId, patientId);
+    if (appointment.isPresent())
+      appointmentRepo.deleteByDoctorIdAndPatientId(doctorId, patientId);
+    return appointment;
   }
 
   @Override
