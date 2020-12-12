@@ -1,0 +1,23 @@
+@import "../../../styles.sass"
+
+.bd-navbar
+    position: sticky
+    top: 0
+    z-index: 9999
+
+.bd-navbar
+    min-height: 4rem
+    background-color: $primary-color-darker
+
+.bd-navbar
+    .navbar-nav
+        .nav-link
+            color: $secondary-color-lighter
+
+            &.active
+                font-weight: 600
+
+            &.active,
+            &:hover
+                color: white
+                background-color: transparent
