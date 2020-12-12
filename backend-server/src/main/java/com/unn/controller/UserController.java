@@ -27,7 +27,7 @@ public class UserController {
   private final ValidationService validationService;
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUser(@PathVariable Long id) {
+  public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
     Optional<User> user = userService.findUser(id);
     if (user.isPresent()) {
       return ResponseEntity.ok(user.get());
@@ -37,7 +37,7 @@ public class UserController {
   }
 
   @GetMapping("/mail/{mail}")
-  public ResponseEntity<User> getUser(@PathVariable String mail) {
+  public ResponseEntity<User> getUser(@PathVariable("mail") String mail) {
     Optional<User> user = userService.findUser(mail);
     if (user.isPresent()) {
       return ResponseEntity.ok(user.get());
@@ -67,7 +67,7 @@ public class UserController {
   }
 
   @PostMapping("/{id}/delete")
-  public ResponseEntity<User> deleteUser(@PathVariable Long id) {
+  public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
     Optional<User> deletedUser = userService.deleteUser(id);
     if (deletedUser.isPresent()) {
       return ResponseEntity.ok(deletedUser.get());
@@ -77,7 +77,7 @@ public class UserController {
   }
 
   @PostMapping("/mail/{mail}/delete")
-  public ResponseEntity<User> deleteUser(@PathVariable String mail) {
+  public ResponseEntity<User> deleteUser(@PathVariable("mail") String mail) {
     Optional<User> deletedUser = userService.deleteUser(mail);
     if (deletedUser.isPresent()) {
       return ResponseEntity.ok(deletedUser.get());
