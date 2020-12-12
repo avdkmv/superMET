@@ -1,23 +1,31 @@
 package com.unn.service.impl;
 
 import com.unn.constants.Constant;
+
+import com.unn.model.Chat;
 import com.unn.model.Appointment;
 import com.unn.model.Document;
 import com.unn.model.Message;
 import com.unn.model.User;
+import com.unn.repository.AppointmentRepo;
+import com.unn.repository.DoctorRepo;
+import com.unn.repository.PatientRepo;
 import com.unn.repository.UserRepo;
 import com.unn.service.IValidationService;
-
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ValidationService implements IValidationService {
-  
   private final UserRepo userRepo;
+  private final AppointmentRepo appointmentRepo;
+  private final DoctorRepo doctorRepo;
+  private final PatientRepo patientRepo;
 
   @Override
   public boolean validateUserCreation(User user) {
@@ -58,9 +66,19 @@ public class ValidationService implements IValidationService {
   }
 
   @Override
-  public boolean validateAppointment(Appointment appointment) {
-    // TODO:  implement method
-    return false;
+  public boolean validateAppointmentCreation(Appointment appointment) {
+    return(
+      doctorRepo.findById(appointment.getDoctor().getId()).isPresent() &&
+      patientRepo.findById(appointment.getPatient().getId()).isPresent()
+    );
+  }
+
+  @Override
+  public boolean validateChatCreation(Chat chat) {
+    return(
+      doctorRepo.findById(chat.getDoctor().getId()).isPresent() &&
+      patientRepo.findById(chat.getPatient().getId()).isPresent()
+    );
   }
 
   private boolean isStringParamsValid(int allowedSize, String... params) {

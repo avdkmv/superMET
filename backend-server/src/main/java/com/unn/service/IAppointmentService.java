@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.unn.model.Appointment;
 
 public interface IAppointmentService {
-  Optional<Appointment> createAppointment(Long doctorId, Long patientId);
+  Optional<Appointment> createAppointment(Appointment appointment);
 
   Optional<Appointment> findAppointment(Long appointmentId);
   Optional<Appointment> findAppointment(Long doctorId, Long patientId);
