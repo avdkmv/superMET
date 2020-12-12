@@ -1,5 +1,6 @@
 package com.unn.service.impl;
 
+import com.unn.constants.Constant;
 import com.unn.model.Appointment;
 import com.unn.model.Document;
 import com.unn.model.Message;
@@ -15,8 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ValidationService implements IValidationService {
-  private final int USER_PARAMS_SIZE = 127;
-
+  
   private final UserRepo userRepo;
 
   @Override
@@ -24,7 +24,7 @@ public class ValidationService implements IValidationService {
     return (
       user.getUserTypeId() != null &&
       isStringParamsValid(
-        USER_PARAMS_SIZE,
+        Constant.USER_PARAMS_SIZE,
         user.getUsername(),
         user.getPassword(),
         user.getMail()
@@ -37,7 +37,7 @@ public class ValidationService implements IValidationService {
   public boolean validateUserUpdate(User user) {
     return (
       isStringParamsValid(
-        USER_PARAMS_SIZE,
+        Constant.USER_PARAMS_SIZE,
         user.getUsername(),
         user.getPassword()
       ) &&
