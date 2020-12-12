@@ -16,13 +16,7 @@ public class UserService implements IUserService {
   private final UserRepo userRepo;
 
   @Override
-  public Optional<User> createUser(
-    Long userTypeId,
-    String username,
-    String password,
-    String mail
-  ) {
-    User user = new User(userTypeId, username, password, mail);
+  public Optional<User> createUser(User user) {
     userRepo.save(user);
     return Optional.of(user);
   }
@@ -38,37 +32,29 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public boolean deleteUser(String mail) {
+  public Optional<User> deleteUser(String mail) {
     Optional<User> user = userRepo.findByMail(mail);
     if (user.isPresent()) {
       userRepo.delete(user.get());
-      return true;
-    } else {
-      return false;
     }
+    return user;
   }
 
   @Override
-  public boolean deleteUser(Long id) {
+  public Optional<User> deleteUser(Long id) {
     Optional<User> user = userRepo.findById(id);
     if (user.isPresent()) {
       userRepo.delete(user.get());
-      return true;
-    } else {
-      return false;
     }
+    return user;
   }
 
   @Override
-  public boolean updateUser(String username, String password, String mail) {
-    Optional<User> user = userRepo.findByMail(mail);
-    if (user.isPresent()) {
-      user.get().setUsername(username);
-      user.get().setPassword(password);
-      userRepo.save(user.get());
-      return true;
-    } else {
-      return false;
-    }
+  public Optional<User> updateUser(User user) {
+    Optional<User> updatedUser = userRepo.findByMail(user.getMail());
+    updatedUser.get().setUsername(user.getUsername());
+    updatedUser.get().setPassword(user.getPassword());
+    userRepo.save(updatedUser.get());
+    return updatedUser;
   }
 }

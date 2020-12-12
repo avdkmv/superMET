@@ -6,7 +6,8 @@ import com.unn.model.Message;
 import com.unn.model.User;
 
 public interface IValidationService {
-  boolean validateUser(User user);
+  boolean validateUserCreation(User user);
+  boolean validateUserUpdate(User user);
   boolean validateMessage(Message message);
   boolean validateDocument(Document document);
   boolean validateAppointment(Appointment appointment);
