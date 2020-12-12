@@ -1,5 +1,7 @@
 package com.unn.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import com.unn.model.User;
@@ -9,10 +11,10 @@ import com.unn.service.impl.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -24,14 +26,24 @@ public class UserController {
   private final UserService userService;
   private final ValidationService validationService;
 
-  @GetMapping("/getById")
-  public ResponseEntity<User> getUser(@RequestParam Long id) {
-    return userService.findUser(id);
+  @GetMapping("/{id}")
+  public ResponseEntity<User> getUser(@PathVariable Long id) {
+    Optional<User> user = userService.findUser(id);
+    if (user.isPresent()) {
+      return ResponseEntity.ok(user.get());
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
   }
 
-  @GetMapping("/getByMail")
-  public ResponseEntity<User> getUser(@RequestParam String mail) {
-    return userService.findUser(mail);
+  @GetMapping("/mail/{mail}")
+  public ResponseEntity<User> getUser(@PathVariable String mail) {
+    Optional<User> user = userService.findUser(mail);
+    if (user.isPresent()) {
+      return ResponseEntity.ok(user.get());
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
   }
 
   @PostMapping("/registration")
@@ -54,13 +66,23 @@ public class UserController {
     }
   }
 
-  @PostMapping("/deleteById")
-  public HttpStatus deleteUser(@RequestParam Long id) {
-    return userService.deleteUser(id);
+  @PostMapping("/{id}/delete")
+  public ResponseEntity<User> deleteUser(@PathVariable Long id) {
+    Optional<User> deletedUser = userService.deleteUser(id);
+    if (deletedUser.isPresent()) {
+      return ResponseEntity.ok(deletedUser.get());
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
   }
 
-  @PostMapping("/deleteByMail")
-  public HttpStatus deleteUser(@RequestParam String mail) {
-    return userService.deleteUser(mail);
+  @PostMapping("/mail/{mail}/delete")
+  public ResponseEntity<User> deleteUser(@PathVariable String mail) {
+    Optional<User> deletedUser = userService.deleteUser(mail);
+    if (deletedUser.isPresent()) {
+      return ResponseEntity.ok(deletedUser.get());
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
   }
 }
