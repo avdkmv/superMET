@@ -35,7 +35,7 @@ public class UserService implements IUserService {
   public Optional<User> deleteUser(String mail) {
     Optional<User> user = userRepo.findByMail(mail);
     if (user.isPresent()) {
-      userRepo.delete(user.get());
+      userRepo.deleteById(user.get().getId());
     }
     return user;
   }
@@ -44,7 +44,7 @@ public class UserService implements IUserService {
   public Optional<User> deleteUser(Long id) {
     Optional<User> user = userRepo.findById(id);
     if (user.isPresent()) {
-      userRepo.delete(user.get());
+      userRepo.deleteById(user.get().getId());
     }
     return user;
   }
