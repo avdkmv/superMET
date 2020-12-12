@@ -9,6 +9,7 @@ public interface IValidationService {
   boolean validateUserCreation(User user);
   boolean validateUserUpdate(User user);
   boolean validateMessage(Message message);
-  boolean validateDocument(Document document);
+  public boolean validateDocumentCreate(Document document);
+  public boolean validateDocumentUpdate(Document document);
   boolean validateAppointment(Appointment appointment);
 }
