@@ -1,6 +1,7 @@
 package com.unn.model;
 
 import java.util.Date;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,4 +41,9 @@ public class Appointment {
   private Date date;
 
   private Long code;
+
+  public Appointment(Doctor doctor, Patient patient) {
+    this.doctor = doctor;
+    this.patient = patient;
+  }
 }
