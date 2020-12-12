@@ -52,7 +52,7 @@ public class UserController {
       userService.createUser(user);
       return ResponseEntity.ok(user);
     } else {
-      return ResponseEntity.status(HttpStatus.CONFLICT).build();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
   }
 
@@ -62,7 +62,7 @@ public class UserController {
       userService.updateUser(user);
       return ResponseEntity.ok(user);
     } else {
-      return ResponseEntity.status(HttpStatus.CONFLICT).build();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
   }
 
