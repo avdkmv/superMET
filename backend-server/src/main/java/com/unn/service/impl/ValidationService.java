@@ -89,4 +89,12 @@ public class ValidationService implements IValidationService {
     }
     return true;
   }
+
+  public boolean validateWorkTime(int startTime, int endTime) {
+    if ((endTime < startTime) || 
+        (endTime < 0 || startTime < 0 ) || 
+        (startTime > 24 || endTime > 24 ))
+      return false;
+    return true;
+  }
 }

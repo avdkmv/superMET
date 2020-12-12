@@ -3,15 +3,18 @@ package com.unn.service;
 import java.util.Optional;
 
 import com.unn.model.Calendar;
+import com.unn.model.Schedule;
 
 public interface IScheduleService {
-  Optional<Calendar> createSchedule(Long calendarId);
+  Optional<Schedule> createSchedule(Long calendarId);
 
-  Optional<Calendar> deleteSchedule(Long calendarId);
+  Optional<Schedule> createScheduleByDoctorID(Long doctorId, int startTime, int endTime);
 
-  Optional<Calendar> findCalendar(Long calendarId);
+  Optional<Schedule> deleteSchedule(Long calendarId);
+
+  Optional<Schedule> findCalendar(Long calendarId);
   
-  Optional<Calendar> modifyCalendar(Long calendarId);
+  Optional<Schedule> modifyCalendar(Long calendarId);
 
-  Optional<Calendar> deleteCalendar(Long calendarId);
+  Optional<Schedule> deleteCalendar(Long calendarId);
 }

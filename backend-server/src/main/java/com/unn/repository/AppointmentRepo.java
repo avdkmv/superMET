@@ -1,5 +1,8 @@
 package com.unn.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.unn.model.Appointment;
 
 import com.unn.model.Doctor;
@@ -18,4 +21,5 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 
     @Transactional
     void deleteByDoctorIdAndPatientId(Long doctorId, Long patientId);
+    Optional<List<Appointment>> findAllByDoctorId(Long doctorId);
 }

@@ -41,4 +41,12 @@ public class Calendar {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private Map<Long, Appointment> appointments;
+
+  public Calendar(Doctor d) {
+    doctor = d;
+  }
+
+  public void SetAppointments(Map<Long, Appointment> a) {
+    appointments = a;
+  }
 }
