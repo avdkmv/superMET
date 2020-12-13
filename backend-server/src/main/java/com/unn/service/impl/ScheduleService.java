@@ -16,6 +16,10 @@ import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice.Return;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,62 +33,89 @@ public class ScheduleService implements IScheduleService {
 
   @Override
   public Optional<Schedule> createSchedule(Long calendarId) {
-    return null;
+    Schedule schedule = new Schedule();
+
+    Optional<Calendar> calendar = calendarRepo.getByID(calendarId);
+    if(calendar.isPresent()) {
+      schedule.setCalendar(calendar.get());
+    }
+
+    return Optional.of(schedule);
   }
 
   @Override
-  public Optional<Schedule> createScheduleByDoctorID(
-    Long doctorId,
-    int startTime,
-    int endTime
-  ) {
+  public Optional<Schedule> createScheduleByDoctorID(Long doctorId, int startTime, int endTime) {
+    Schedule schedule = new Schedule();
+
     if (validationService.validateWorkTime(startTime, endTime)) {
-      Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-
-      // create appointments
       Map<Long, Appointment> apm;
-
-      Optional<List<Appointment>> appointments = appointmentRepo.findAllByDoctorId(
-        doctorId
-      );
+      Optional<List<Appointment>> appointments = appointmentRepo.findAllByDoctorId(doctorId);
 
       if (appointments.isPresent()) {
-        apm =
-          appointments
-            .get()
-            .stream()
-            .collect(
+        apm = appointments.get().stream().collect(
               Collectors.toMap(Appointment::getId, appointment -> appointment)
             );
-      }
 
-      
+        Optional<Calendar> calendar = calendarRepo.getByDoctorID(doctorId);
+        calendar.get().SetAppointments(apm);
+        
+        Optional<Doctor> doctor = doctorRepo.findById(doctorId);
+        calendar.get().SetDoctor(doctor.get());
+
+        schedule.setCalendar(calendar.get());
+      }
     }
 
-    return null;
+    return Optional.of(schedule);
   }
 
   @Override
   public Optional<Schedule> deleteSchedule(Long calendarId) {
-    // TODO:  implement method
-    return null;
+    Schedule schedule = new Schedule();
+
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+    if (calendar.isPresent()) {
+      calendarRepo.delete(calendar.get());
+      schedule.setCalendar(calendar.get());
+    }
+
+    return Optional.of(schedule);
   }
 
   @Override
   public Optional<Schedule> findCalendar(Long calendarId) {
-    // TODO:  implement method
-    return null;
+    Schedule schedule = new Schedule();
+
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+    if (calendar.isPresent()) {
+      schedule.setCalendar(calendar.get());
+    }
+
+    return Optional.of(schedule);  
   }
 
   @Override
   public Optional<Schedule> modifyCalendar(Long calendarId) {
-    // TODO:  implement method
-    return null;
+    Schedule schedule = new Schedule();
+
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+    if (calendar.isPresent()) {
+      schedule.setCalendar(calendar.get());
+    }
+
+    return Optional.of(schedule);  
   }
 
   @Override
   public Optional<Schedule> deleteCalendar(Long calendarId) {
-    // TODO:  implement method
-    return null;
+    Schedule schedule = new Schedule();
+
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+    if (calendar.isPresent()) {
+      calendarRepo.delete(calendar.get());
+      schedule.setCalendar(calendar.get());
+    }
+
+    return Optional.of(schedule);
   }
 }

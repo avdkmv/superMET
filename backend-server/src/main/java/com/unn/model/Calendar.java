@@ -42,7 +42,7 @@ public class Calendar {
   @Column(columnDefinition = "jsonb")
   private Map<Long, Appointment> appointments;
 
-  public Calendar(Doctor d) {
+  public void SetDoctor(Doctor d) {
     doctor = d;
   }
 

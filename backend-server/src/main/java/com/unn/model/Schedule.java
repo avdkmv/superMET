@@ -31,7 +31,7 @@ public class Schedule {
   @JoinColumn(name = "calendar_id")
   private Calendar calendar;
 
-  public Schedule(Calendar cldr) {
+  public void setCalendar(Calendar cldr) {
     this.calendar = cldr;
   }
 }
