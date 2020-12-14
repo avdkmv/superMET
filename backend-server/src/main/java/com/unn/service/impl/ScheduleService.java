@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import ch.qos.logback.core.util.OptionHelper;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService implements IScheduleService {
@@ -35,12 +37,14 @@ public class ScheduleService implements IScheduleService {
   public Optional<Schedule> createSchedule(Long calendarId) {
     Schedule schedule = new Schedule();
 
-    Optional<Calendar> calendar = calendarRepo.getByID(calendarId);
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
     if(calendar.isPresent()) {
       schedule.setCalendar(calendar.get());
+
+      return Optional.of(schedule);
     }
 
-    return Optional.of(schedule);
+    return Optional.empty();
   }
 
   @Override
@@ -56,17 +60,19 @@ public class ScheduleService implements IScheduleService {
               Collectors.toMap(Appointment::getId, appointment -> appointment)
             );
 
-        Optional<Calendar> calendar = calendarRepo.getByDoctorID(doctorId);
-        calendar.get().SetAppointments(apm);
+        Optional<Calendar> calendar = calendarRepo.findDoctorById(doctorId);
+        calendar.get().setAppointments(apm);
         
         Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-        calendar.get().SetDoctor(doctor.get());
+        calendar.get().setDoctor(doctor.get());
 
         schedule.setCalendar(calendar.get());
+
+          return Optional.of(schedule);
       }
     }
 
-    return Optional.of(schedule);
+    return Optional.empty();
   }
 
   @Override
@@ -77,9 +83,11 @@ public class ScheduleService implements IScheduleService {
     if (calendar.isPresent()) {
       calendarRepo.delete(calendar.get());
       schedule.setCalendar(calendar.get());
+
+      return Optional.of(schedule);
     }
 
-    return Optional.of(schedule);
+    return Optional.empty();
   }
 
   @Override
@@ -89,9 +97,11 @@ public class ScheduleService implements IScheduleService {
     Optional<Calendar> calendar = calendarRepo.findById(calendarId);
     if (calendar.isPresent()) {
       schedule.setCalendar(calendar.get());
+
+      return Optional.of(schedule);  
     }
 
-    return Optional.of(schedule);  
+    return Optional.empty();
   }
 
   @Override
@@ -101,9 +111,11 @@ public class ScheduleService implements IScheduleService {
     Optional<Calendar> calendar = calendarRepo.findById(calendarId);
     if (calendar.isPresent()) {
       schedule.setCalendar(calendar.get());
+
+      return Optional.of(schedule);  
     }
 
-    return Optional.of(schedule);  
+    return Optional.empty();
   }
 
   @Override
@@ -114,8 +126,10 @@ public class ScheduleService implements IScheduleService {
     if (calendar.isPresent()) {
       calendarRepo.delete(calendar.get());
       schedule.setCalendar(calendar.get());
+
+      return Optional.of(schedule);
     }
 
-    return Optional.of(schedule);
+    return Optional.empty();
   }
 }
