@@ -1,0 +1,15 @@
+language: java
+
+os: linux
+dist: bionic
+
+jdk: openjdk8
+
+jobs:
+  include:
+    - stage: Maven
+      script:
+        - mvn verify
+
+notifications:
+  email: false
