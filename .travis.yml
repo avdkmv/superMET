@@ -1,16 +1,15 @@
-matrix:
-    include:
-        - language: java
-            os: linux
-            jdk: openjdk11
-            before_script:
-            - cd backend-server
-            - stage: Maven
-                script:
-                    - mvn clean install
-        
-#        - language:
-    
+os: linux
+dist: bionic
+
+jdk: openjdk11
+
+jobs:
+  include:
+    - stage: Maven
+      before_script:
+        - cd backend-server
+      script:
+        - mvn clean install
 
 notifications:
-  email: false
+  email: false 
