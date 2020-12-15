@@ -3,13 +3,13 @@ language: java
 os: linux
 dist: bionic
 
-jdk: openjdk8
+jdk: openjdk11
 
 jobs:
   include:
     - stage: Maven
       script:
-        - mvn verify
+        - mvn clean install
 
 notifications:
   email: false
