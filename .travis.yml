@@ -1,0 +1,15 @@
+os: linux
+dist: bionic
+
+jdk: openjdk11
+
+jobs:
+  include:
+    - stage: Maven
+      before_script:
+        - cd backend-server
+      script:
+        - mvn clean install
+
+notifications:
+  email: false 
