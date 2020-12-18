@@ -34,24 +34,16 @@ public class CalendarService implements ICalendarService {
   private final ValidationService validationService;
 
   @Override
-  public Optional<Calendar> createCalendar(Long calendarId) {
-    /*
-    Calendar Calendar = new Calendar();
+  public Optional<Calendar> createCalendar() {
+    Calendar calendar = new Calendar();
+    calendarRepo.save(calendar);
 
-    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
-    if(calendar.isPresent()) {
-      Calendar.setCalendar(calendar.get());
-
-      return Optional.of(Calendar);
-    }
-    */
     return Optional.empty();
   }
 
   @Override
   public Optional<Calendar> createCalendarByDoctorID(Long doctorId, int startTime, int endTime) {
-    /*
-    Calendar Calendar = new Calendar();
+    Calendar calendar = new Calendar();
 
     if (validationService.validateWorkTime(startTime, endTime)) {
       Map<Long, Appointment> apm;
@@ -62,64 +54,37 @@ public class CalendarService implements ICalendarService {
               Collectors.toMap(Appointment::getId, appointment -> appointment)
             );
 
-        Optional<Calendar> calendar = calendarRepo.findDoctorById(doctorId);
-        calendar.get().setAppointments(apm);
+        calendar.setAppointments(apm);
         
         Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-        calendar.get().setDoctor(doctor.get());
+        calendar.setDoctor(doctor.get());
 
-        Calendar.setCalendar(calendar.get());
-
-          return Optional.of(Calendar);
+        return Optional.of(calendar);
       }
     }
-*/
+
     return Optional.empty();
   }
 
   @Override
   public Optional<Calendar> findCalendar(Long calendarId) {
-  /*
-    Calendar Calendar = new Calendar();
-
-    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
-    if (calendar.isPresent()) {
-      Calendar.setCalendar(calendar.get());
-
-      return Optional.of(Calendar);  
-    }
-*/
-    return Optional.empty();
+    return calendarRepo.findById(calendarId);
   }
 
   @Override
   public Optional<Calendar> modifyCalendar(Long calendarId) {
-  /*
-    Calendar Calendar = new Calendar();
-
-    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
-    if (calendar.isPresent()) {
-      Calendar.setCalendar(calendar.get());
-
-      return Optional.of(Calendar);  
-    }
-*/
+    // Wthat should I do here?
     return Optional.empty();
   }
 
   @Override
   public Optional<Calendar> deleteCalendar(Long calendarId) {
-  /*
-    Calendar Calendar = new Calendar();
-
     Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+    
     if (calendar.isPresent()) {
       calendarRepo.delete(calendar.get());
-      Calendar.setCalendar(calendar.get());
-
-      return Optional.of(Calendar);
     }
-*/
-    return Optional.empty();
+    
+    return calendar;
   }
 }
