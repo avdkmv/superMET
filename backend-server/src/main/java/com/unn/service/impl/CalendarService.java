@@ -3,11 +3,11 @@ package com.unn.service.impl;
 import com.unn.model.Appointment;
 import com.unn.model.Calendar;
 import com.unn.model.Doctor;
-import com.unn.model.Schedule;
+import com.unn.model.Calendar;
 import com.unn.repository.AppointmentRepo;
 import com.unn.repository.CalendarRepo;
 import com.unn.repository.DoctorRepo;
-import com.unn.service.IScheduleService;
+import com.unn.service.ICalendarService;
 import com.unn.service.IValidationService;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,7 @@ import ch.qos.logback.core.util.OptionHelper;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleService implements IScheduleService {
+public class CalendarService implements ICalendarService {
   private final CalendarRepo calendarRepo;
   private final DoctorRepo doctorRepo;
   private final AppointmentRepo appointmentRepo;
@@ -34,22 +34,24 @@ public class ScheduleService implements IScheduleService {
   private final ValidationService validationService;
 
   @Override
-  public Optional<Schedule> createSchedule(Long calendarId) {
-    Schedule schedule = new Schedule();
+  public Optional<Calendar> createCalendar(Long calendarId) {
+    /*
+    Calendar Calendar = new Calendar();
 
     Optional<Calendar> calendar = calendarRepo.findById(calendarId);
     if(calendar.isPresent()) {
-      schedule.setCalendar(calendar.get());
+      Calendar.setCalendar(calendar.get());
 
-      return Optional.of(schedule);
+      return Optional.of(Calendar);
     }
-
+    */
     return Optional.empty();
   }
 
   @Override
-  public Optional<Schedule> createScheduleByDoctorID(Long doctorId, int startTime, int endTime) {
-    Schedule schedule = new Schedule();
+  public Optional<Calendar> createCalendarByDoctorID(Long doctorId, int startTime, int endTime) {
+    /*
+    Calendar Calendar = new Calendar();
 
     if (validationService.validateWorkTime(startTime, endTime)) {
       Map<Long, Appointment> apm;
@@ -66,70 +68,58 @@ public class ScheduleService implements IScheduleService {
         Optional<Doctor> doctor = doctorRepo.findById(doctorId);
         calendar.get().setDoctor(doctor.get());
 
-        schedule.setCalendar(calendar.get());
+        Calendar.setCalendar(calendar.get());
 
-          return Optional.of(schedule);
+          return Optional.of(Calendar);
       }
     }
-
+*/
     return Optional.empty();
   }
 
   @Override
-  public Optional<Schedule> deleteSchedule(Long calendarId) {
-    Schedule schedule = new Schedule();
+  public Optional<Calendar> findCalendar(Long calendarId) {
+  /*
+    Calendar Calendar = new Calendar();
+
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+    if (calendar.isPresent()) {
+      Calendar.setCalendar(calendar.get());
+
+      return Optional.of(Calendar);  
+    }
+*/
+    return Optional.empty();
+  }
+
+  @Override
+  public Optional<Calendar> modifyCalendar(Long calendarId) {
+  /*
+    Calendar Calendar = new Calendar();
+
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+    if (calendar.isPresent()) {
+      Calendar.setCalendar(calendar.get());
+
+      return Optional.of(Calendar);  
+    }
+*/
+    return Optional.empty();
+  }
+
+  @Override
+  public Optional<Calendar> deleteCalendar(Long calendarId) {
+  /*
+    Calendar Calendar = new Calendar();
 
     Optional<Calendar> calendar = calendarRepo.findById(calendarId);
     if (calendar.isPresent()) {
       calendarRepo.delete(calendar.get());
-      schedule.setCalendar(calendar.get());
+      Calendar.setCalendar(calendar.get());
 
-      return Optional.of(schedule);
+      return Optional.of(Calendar);
     }
-
-    return Optional.empty();
-  }
-
-  @Override
-  public Optional<Schedule> findCalendar(Long calendarId) {
-    Schedule schedule = new Schedule();
-
-    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
-    if (calendar.isPresent()) {
-      schedule.setCalendar(calendar.get());
-
-      return Optional.of(schedule);  
-    }
-
-    return Optional.empty();
-  }
-
-  @Override
-  public Optional<Schedule> modifyCalendar(Long calendarId) {
-    Schedule schedule = new Schedule();
-
-    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
-    if (calendar.isPresent()) {
-      schedule.setCalendar(calendar.get());
-
-      return Optional.of(schedule);  
-    }
-
-    return Optional.empty();
-  }
-
-  @Override
-  public Optional<Schedule> deleteCalendar(Long calendarId) {
-    Schedule schedule = new Schedule();
-
-    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
-    if (calendar.isPresent()) {
-      calendarRepo.delete(calendar.get());
-      schedule.setCalendar(calendar.get());
-
-      return Optional.of(schedule);
-    }
-
+*/
     return Optional.empty();
   }
 }
