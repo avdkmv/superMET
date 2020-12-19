@@ -79,7 +79,7 @@ public class AppointmentController {
     }
   }
 
-  @GetMapping("/doctor_free/{id}")
+  @GetMapping("/doctor/free/{id}")
   public ResponseEntity<List<Appointment>> getDoctorFreeAppointment(@PathVariable(name = "id") Long id) {
     Optional<List<Appointment>> appointments = appointmentService.findAllFreeDoctorAppointment(id);
     if (appointments.isPresent()) {
@@ -89,7 +89,7 @@ public class AppointmentController {
     }
   }
 
-  @GetMapping("/doctor_busy/{id}")
+  @GetMapping("/doctor/busy/{id}")
   public ResponseEntity<List<Appointment>> getDoctorBusyAppointment(@PathVariable(name = "id") Long id) {
     Optional<List<Appointment>> appointments = appointmentService.findAllBusyDoctorAppointment(id);
     if (appointments.isPresent()) {
@@ -99,7 +99,7 @@ public class AppointmentController {
     }
   }
 
-  @GetMapping("/patient_free/{id}")
+  @GetMapping("/patient/free/{id}")
   public ResponseEntity<List<Appointment>> getPatientFreeAppointment(@PathVariable(name = "id") Long id) {
     Optional<List<Appointment>> appointments = appointmentService.findAllFreePatientAppointment(id);
     if (appointments.isPresent()) {
@@ -109,7 +109,7 @@ public class AppointmentController {
     }
   }
 
-  @GetMapping("/patient_busy/{id}")
+  @GetMapping("/patient/busy/{id}")
   public ResponseEntity<List<Appointment>> getPatientBusyAppointment(@PathVariable(name = "id") Long id) {
     Optional<List<Appointment>> appointments = appointmentService.findAllBusyPatientAppointment(id);
     if (appointments.isPresent()) {
