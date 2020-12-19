@@ -1,5 +1,6 @@
 package com.unn.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +26,14 @@ public class AppointmentService implements IAppointmentService {
   private final PatientRepo patientRepo;
 
   @Override
-  public Optional<Appointment> createAppointment(Appointment appointment) {
-    appointmentRepo.save(appointment);
-    return Optional.of(appointment);
+  public Optional<Appointment> createAppointment(Long doctorId, Date date) {
+    Optional<Doctor> doctor = doctorRepo.findById(doctorId);
+    if (doctor.isPresent()) {
+        Appointment appointment = new Appointment(doctor.get(), date);
+        return Optional.of(appointment);
+    } else {
+        return Optional.empty();
+    }
   }
 
   @Override

@@ -1,7 +1,6 @@
 package com.unn.model;
 
 import java.util.Date;
-import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,9 +43,9 @@ public class Appointment {
 
   private boolean busy;
 
-  public Appointment(Doctor doctor, Patient patient) {
+  public Appointment(Doctor doctor, Date date) {
     this.doctor = doctor;
-    this.patient = patient;
+    this.date = date;
     this.busy = false;
   }
 }

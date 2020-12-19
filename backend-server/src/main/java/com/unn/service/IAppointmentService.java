@@ -1,12 +1,13 @@
 package com.unn.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import com.unn.model.Appointment;
 
 public interface IAppointmentService {
-  Optional<Appointment> createAppointment(Appointment appointment);
+  Optional<Appointment> createAppointment(Long doctorId, Date date);
 
   Optional<Appointment> findAppointment(Long appointmentId);
   Optional<Appointment> findAppointment(Long doctorId, Long patientId);

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,11 +70,12 @@ public class AppointmentController {
     }
   }
 
-  @PostMapping("/create")
-  public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
-    if (validationService.validateAppointmentCreation(appointment)) {
-      appointmentService.createAppointment(appointment);
-      return ResponseEntity.ok(appointment);
+  @GetMapping("/create/doctor/{doctorId}/date/{date}")
+  public ResponseEntity<Appointment> createAppointment(@PathVariable(name = "doctorId") Long doctorId,
+                                                       @PathVariable(name = "date") Date date) {
+    if (validationService.validateAppointmentCreation(doctorId)) {
+      Optional<Appointment> appointment = appointmentService.createAppointment(doctorId, date);
+      return ResponseEntity.ok(appointment.get());
     } else {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
