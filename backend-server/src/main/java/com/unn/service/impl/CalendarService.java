@@ -1,30 +1,25 @@
 package com.unn.service.impl;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.unn.model.Appointment;
 import com.unn.model.Calendar;
 import com.unn.model.Doctor;
-import com.unn.model.Calendar;
 import com.unn.repository.AppointmentRepo;
 import com.unn.repository.CalendarRepo;
 import com.unn.repository.DoctorRepo;
 import com.unn.service.ICalendarService;
-import com.unn.service.IValidationService;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice.Return;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.core.util.OptionHelper;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -44,21 +39,24 @@ public class CalendarService implements ICalendarService {
       calendar.setStartTime(startTime);
       calendar.setEndTime(endTime);
 
-      Map<Long, Appointment> apm;
-      Optional<List<Appointment>> appointments = appointmentRepo.findAllByDoctorId(doctorId);
+      Optional<Doctor> doctor = doctorRepo.findById(doctorId);
+      calendar.setDoctor(doctor.get());
 
-      if (appointments.isPresent()) {
-        apm = appointments.get().stream().collect(
-              Collectors.toMap(Appointment::getId, appointment -> appointment)
-            );
+      Map<Long, Appointment> appointments;
 
-        calendar.setAppointments(apm);
-        
-        Optional<Doctor> doctor = doctorRepo.findById(doctorId);
-        calendar.setDoctor(doctor.get());
+      Date currentDate = new Date();
+      for (int day = currentDate.getDay(); day < day + 14; day++) {
+        for (int hour = startTime; hour < endTime; hour++) {
+          Date appointmentDate = new Date(currentDate.getYear(), day, hour);
+          Appointment newAppointment = new Appointment(doctorId, appointmentDate);
+          appointmentRepo.save(newAppointment);
+          appointments.put(newAppointment.getId(), newAppointment);
+        }
       }
-    }
 
+      calendar.setAppointments(appointments);      
+    }
+    calendarRepo.save(calendar);
     return Optional.of(calendar);
   }
 
