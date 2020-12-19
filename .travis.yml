@@ -10,7 +10,7 @@ jobs:
       before_script:
         - cd backend-server
       script:
-        - mvn clean install
+        - mvn clean install -DskipTests
 
 notifications:
   email: false 
