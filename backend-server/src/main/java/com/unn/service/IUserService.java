@@ -14,4 +14,6 @@ public interface IUserService {
   Optional<User> deleteUser(Long id);
 
   Optional<User> updateUser(User user);
+
+  void clearTable();
 }

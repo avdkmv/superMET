@@ -57,4 +57,9 @@ public class UserService implements IUserService {
     userRepo.save(updatedUser.get());
     return updatedUser;
   }
+
+  @Override
+  public void clearTable() {
+      userRepo.deleteAll();
+  }
 }
