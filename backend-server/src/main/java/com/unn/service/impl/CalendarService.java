@@ -45,7 +45,8 @@ public class CalendarService implements ICalendarService {
       Map<Long, Appointment> appointments;
 
       Date currentDate = new Date();
-      for (int day = currentDate.getDay(); day < day + 14; day++) {
+      int currentDay = currentDate.getDay()
+      for (int day = currentDay; day < currentDay + 14; day++) {
         for (int hour = startTime; hour < endTime; hour++) {
           Date appointmentDate = new Date(currentDate.getYear(), day, hour);
           Appointment newAppointment = new Appointment(doctorId, appointmentDate);
