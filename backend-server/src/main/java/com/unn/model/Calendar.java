@@ -41,4 +41,7 @@ public class Calendar {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private Map<Long, Appointment> appointments;
+
+  int startTime;
+  int endTime;
 }

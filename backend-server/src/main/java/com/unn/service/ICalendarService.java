@@ -6,7 +6,7 @@ import com.unn.model.Calendar;
 import com.unn.model.Calendar;
 
 public interface ICalendarService {
-  Optional<Calendar> createCalendar();
+  Optional<Calendar> createCalendar(Long calendarId);
 
   Optional<Calendar> createCalendarByDoctorID(Long doctorId, int startTime, int endTime);
 

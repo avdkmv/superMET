@@ -34,11 +34,8 @@ public class CalendarService implements ICalendarService {
   private final ValidationService validationService;
 
   @Override
-  public Optional<Calendar> createCalendar() {
-    Calendar calendar = new Calendar();
-    calendarRepo.save(calendar);
-
-    return Optional.empty();
+  public Optional<Calendar> createCalendar(Long calendarId) {
+    return calendarRepo.findById(calendarId);
   }
 
   @Override
@@ -46,6 +43,9 @@ public class CalendarService implements ICalendarService {
     Calendar calendar = new Calendar();
 
     if (validationService.validateWorkTime(startTime, endTime)) {
+      calendar.setStartTime(startTime);
+      calendar.setEndTime(endTime);
+
       Map<Long, Appointment> apm;
       Optional<List<Appointment>> appointments = appointmentRepo.findAllByDoctorId(doctorId);
 
@@ -58,12 +58,10 @@ public class CalendarService implements ICalendarService {
         
         Optional<Doctor> doctor = doctorRepo.findById(doctorId);
         calendar.setDoctor(doctor.get());
-
-        return Optional.of(calendar);
       }
     }
 
-    return Optional.empty();
+    return Optional.of(calendar);
   }
 
   @Override
@@ -73,8 +71,26 @@ public class CalendarService implements ICalendarService {
 
   @Override
   public Optional<Calendar> modifyCalendar(Long calendarId) {
-    // Wthat should I do here?
-    return Optional.empty();
+    Optional<Calendar> calendar = calendarRepo.findById(calendarId);
+
+    if (calendar.isPresent()) {
+      Doctor doctor = calendar.get().getDoctor();
+      Long doctorId = doctor.getId();
+
+      Map<Long, Appointment> apm;
+      Optional<List<Appointment>> appointments = appointmentRepo.findAllByDoctorId(doctorId);
+
+      if (appointments.isPresent()) {
+        apm = appointments.get().stream().collect(
+              Collectors.toMap(Appointment::getId, appointment -> appointment)
+            );
+
+        calendar.get().setAppointments(apm);
+        calendarRepo.save(calendar.get());
+      }
+    }
+
+    return calendar;
   }
 
   @Override
