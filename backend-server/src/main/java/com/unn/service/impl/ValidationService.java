@@ -97,4 +97,10 @@ public class ValidationService implements IValidationService {
       return false;
     return true;
   }
+
+@Override
+public boolean validateAppointment(Appointment appointment) {
+	// TODO Auto-generated method stub
+	return false;
+}
 }

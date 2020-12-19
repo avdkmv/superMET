@@ -21,5 +21,5 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 
     @Transactional
     void deleteByDoctorIdAndPatientId(Long doctorId, Long patientId);
-    Optional<List<Appointment>> findAllByDoctorId(Long doctorId);
+    public Optional<List<Appointment>> findAllByDoctorId(Long doctorId);
 }

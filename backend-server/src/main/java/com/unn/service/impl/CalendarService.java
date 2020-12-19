@@ -1,5 +1,7 @@
 package com.unn.service.impl;
 
+import java.util.Date;
+
 import com.unn.model.Appointment;
 import com.unn.model.Calendar;
 import com.unn.model.Doctor;
@@ -32,11 +34,7 @@ public class CalendarService implements ICalendarService {
   private final AppointmentRepo appointmentRepo;
 
   private final ValidationService validationService;
-
-  @Override
-  public Optional<Calendar> createCalendar(Long calendarId) {
-    return calendarRepo.findById(calendarId);
-  }
+  private final AppointmentService appointmentService;
 
   @Override
   public Optional<Calendar> createCalendarByDoctorID(Long doctorId, int startTime, int endTime) {
