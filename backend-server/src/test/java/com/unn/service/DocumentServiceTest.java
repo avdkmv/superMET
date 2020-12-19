@@ -2,6 +2,8 @@ package com.unn.service;
 
 import java.util.Optional;
 
+import javax.print.Doc;
+
 import com.jayway.jsonpath.Option;
 import com.unn.model.Document;
 import com.unn.model.Resource;
@@ -66,32 +68,52 @@ public class DocumentServiceTest {
         
         documentService.clearTable();
     }
-/*
+
     @Test
     void updateDocument() {
-        /*
-        Long documentId
-        String number
-        String description
-        Resource resource
         documentService.clearTable();
 
-        String number = "0";
-        String description = "description";
-        Resource resource = new Resource();
-        Long resourceId = 1L;
-        resource.setId(resourceId);
+        String number1 = "1";
+        String description1 = "description1";
+        Resource resource1 = new Resource();
+        Long resourceId1 = 1L;
+        resource1.setId(resourceId1);
 
-        Optional<Document> createdDocument = documentService.createDocument(number, description, resourceId);
+        Optional<Document> createdDocument = documentService.createDocument(number1, description1, resourceId1);
         
-        Optional<Document> gotDocument = documentService.findDocumentByResourceId(
-                                            createdDocument.get().getResource().getId());
+        String number2 = "2";
+        String description2 = "description2";
+        Resource resource2 = new Resource();
+        Long resourceId2 = 2L;
+        resource2.setId(resourceId2);
 
-        Assert.assertEquals(gotDocument.get().getNumber(), number);
-        Assert.assertEquals(gotDocument.get().getDescription(), description);
-        Assert.assertEquals(gotDocument .get().getResource(), resourceId);
+        documentService.updateDocument(resourceId2, number2, description2, resource2);
+
+        Optional<Document> gotDocument = documentService.findDocumentByResourceId(resourceId2);
+
+        Assert.assertEquals(gotDocument.get().getNumber(), number2);
+        Assert.assertEquals(gotDocument.get().getDescription(), description2);
+        Assert.assertEquals(gotDocument .get().getResource(), resourceId2);
 
         documentService.clearTable();
     }
-*/
+
+    @Test
+    void deleteDocument() {
+        documentService.clearTable();
+
+        String number1 = "1";
+        String description1 = "description1";
+        Resource resource1 = new Resource();
+        Long resourceId1 = 1L;
+        resource1.setId(resourceId1);
+
+        Optional<Document> createdDocument = documentService.createDocument(number1, description1, resourceId1);
+        
+        Assert.assertTrue(documentService.deleteDocument(createdDocument.get().getId()));
+        
+        Optional<Document> gotDocument = documentService.findDocument(createdDocument.get().getId());
+
+        Assert.assertFalse(gotDocument.isPresent());
+    }
 }
