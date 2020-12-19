@@ -80,6 +80,8 @@ public class DocumentService implements IDocumentService {
     Optional<Document> document = documentRepo.findById(documentId);
     if (document.isPresent()) {
       documentRepo.delete(document.get());
+      File oldFile = new File(Constant.UPLOAD_PATH + "/" + document.get().getResource().getName());
+      oldFile.delete();
     }
     return document;
   }
@@ -99,6 +101,8 @@ public class DocumentService implements IDocumentService {
   private String updateResource(MultipartFile file, Document document)
     throws IOException {
     resourceRepo.deleteById(document.getResource().getId());
+    File oldFile = new File(Constant.UPLOAD_PATH + "/" + document.getResource().getName());
+    oldFile.delete();
 
     String uuidFile = UUID.randomUUID().toString();
     String resultFilename = uuidFile + "." + file.getOriginalFilename();
