@@ -100,4 +100,9 @@ public class DocumentService implements IDocumentService {
         resourceRepo.save(resource);
         return resource.getName();
     }
+
+    @Override
+    public void clearTable() {
+        documentRepo.deleteAll();
+    }
 }
