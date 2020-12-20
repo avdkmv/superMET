@@ -1,7 +1,11 @@
 package com.unn.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.unn.model.User;
 import com.unn.service.impl.UserService;
+import java.util.Optional;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,14 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 public class UserControllerTest extends AbstractControllerTest {
     @Autowired
     private UserService userService;
+
     private final Long userTypeId = 0L;
     private final String username = "username";
     private final String password = "password";
@@ -41,8 +41,9 @@ public class UserControllerTest extends AbstractControllerTest {
         Optional<User> retUser = userService.createUser(user);
 
         String url = "/user/" + retUser.get().getId();
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(url)
-                                          .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
@@ -57,8 +58,9 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void getNotExistingUserByIdTest() throws Exception {
         String url = "/user/0";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(url)
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusNOT_FOUND, status);
@@ -69,8 +71,9 @@ public class UserControllerTest extends AbstractControllerTest {
         Optional<User> retUser = userService.createUser(user);
 
         String url = "/user/mail/" + retUser.get().getMail();
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(url)
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
@@ -85,8 +88,9 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void getNotExistingUserByMailTest() throws Exception {
         String url = "/user/mail/no";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(url)
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusNOT_FOUND, status);
@@ -144,9 +148,9 @@ public class UserControllerTest extends AbstractControllerTest {
     public void registrationTest() throws Exception {
         String url = "/user/registration";
         String jsonToSend = super.mapToJson(user);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(url)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(jsonToSend)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
@@ -163,9 +167,9 @@ public class UserControllerTest extends AbstractControllerTest {
         User notValidUser = user;
         notValidUser.setUserTypeId(null);
         String jsonToSend = super.mapToJson(notValidUser);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(url)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(jsonToSend)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusBAD_REQUEST, status);
@@ -182,9 +186,9 @@ public class UserControllerTest extends AbstractControllerTest {
 
         String url = "/user/edit";
         String jsonToSend = super.mapToJson(editUser);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(url)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(jsonToSend)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
@@ -208,12 +212,11 @@ public class UserControllerTest extends AbstractControllerTest {
 
         String url = "/user/edit";
         String jsonToSend = super.mapToJson(editUser);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(url)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(jsonToSend)).andReturn();
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
+            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusBAD_REQUEST, status);
     }
-
 }

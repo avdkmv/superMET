@@ -4,13 +4,23 @@ language: java
 
 jdk: openjdk11
 
-install:
-  - mvn --projects ./backend-server clean install -DskipTests
+services:
+    - postgresql
 
-# default script for java is mvn test -B it's also called for frontend-server
-# temporary disabled because we doesn't set up test execution for backend-server anyway
+before_script:
+    - createdb -h localhost -p 5432 -U postgres superMET
+
+env:
+    global:
+        - PGUSER=postgres
+        - PGPORT=5432
+
+install:
+    - mvn --projects ./backend-server clean install -DskipTests
+
 script:
-  - echo 0
+    - cd backend-server
+    - mvn test -B
 
 notifications:
-  email: false
+    email: false

@@ -1,5 +1,5 @@
 package com.unn.service;
 
 public interface IResponceService {
-  // ResponseEntity<T> createResponse(T);
+    // ResponseEntity<T> createResponse(T);
 }

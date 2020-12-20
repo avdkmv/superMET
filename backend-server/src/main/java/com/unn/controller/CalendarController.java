@@ -1,15 +1,13 @@
 package com.unn.controller;
 
-import com.unn.service.impl.ScheduleService;
-
+import com.unn.service.impl.CalendarService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/calendar")
 @RequiredArgsConstructor
-public class SchduleController {
-  private final ScheduleService scheduleService;
+public class CalendarController {
+    private final CalendarService CalendarService;
 }
