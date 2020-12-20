@@ -1,15 +1,12 @@
 package com.unn.service.impl;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.unn.model.Facility;
 import com.unn.repository.FacilityRepo;
 import com.unn.service.IFacilityService;
-
-import org.springframework.stereotype.Service;
-
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +24,8 @@ public class FacilityService implements IFacilityService {
         return Optional.of(facility);
     }
 
-	@Override
-	public Optional<Facility> findFacilityById(Long id) {
-		return facilityRepo.findById(id);
-	}
+    @Override
+    public Optional<Facility> findFacilityById(Long id) {
+        return facilityRepo.findById(id);
+    }
 }

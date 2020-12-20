@@ -1,9 +1,8 @@
 package com.unn.service;
 
+import com.unn.model.Facility;
 import java.util.List;
 import java.util.Optional;
-
-import com.unn.model.Facility;
 
 public interface IFacilityService {
     Optional<Facility> createFacility(Facility hospital);
