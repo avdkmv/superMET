@@ -4,13 +4,13 @@ language: java
 
 jdk: openjdk11
 
-jobs:
-  include:
-    - stage: Maven
-      before_script:
-        - cd backend-server
-      script:
-        - mvn clean install
+install:
+  - mvn --projects ./backend-server clean install -DskipTests
+
+# default script for java is mvn test -B it's also called for frontend-server
+# temporary disabled because we doesn't set up test execution for backend-server anyway
+script:
+  - echo 0
 
 notifications:
-  email: false 
+  email: false
