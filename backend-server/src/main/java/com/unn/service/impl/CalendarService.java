@@ -46,18 +46,8 @@ public class CalendarService implements ICalendarService {
 
             LocalDate currentDate = LocalDate.now();
             LocalDate endDate = currentDate.plusDays(14); // schedule for two weeks
-            for (LocalDate startDate = currentDate; startDate.isBefore(endDate); startDate = startDate.plusDays(1)) {
-                if (startDate.getDayOfWeek().getValue() != 6 && startDate.getDayOfWeek().getValue() != 7) {
-                    for (int startHour = startTime; startHour < endTime; startHour++) {
-                        Date appointmentDate = java.sql.Date.valueOf(startDate);
-                        Appointment newAppointment = new Appointment(doctorId, appointmentDate.setHours(startHour));
-                        appointmentRepo.save(newAppointment);
-                        appointments.put(newAppointment.getId(), newAppointment);
-                    }
-                }
-            }
 
-            calendar.setAppointments(appointments);
+            calendar.setAppointments(fillAppointments(currentDate, endDate, startTime, endTime, calendar));
         }
         calendarRepo.save(calendar);
         return Optional.of(calendar);
@@ -88,26 +78,15 @@ public class CalendarService implements ICalendarService {
                         }
                     );
                 // filling next week
-                for (
-                    LocalDate nextWeekStartDate = currentDate.plusDays(7);
-                    nextWeekStartDate.isBefore(currentDate.plusDays(14));
-                    nextWeekStartDate = nextWeekStartDate.plusDays(1)
-                ) {
-                    if (
-                        nextWeekStartDate.getDayOfWeek().getValue() != 6 &&
-                        nextWeekStartDate.getDayOfWeek().getValue() != 7
-                    ) {
-                        for (int startHour = calendar.getStartTime(); startHour < calendar.getEndTime(); startHour++) {
-                            Date appointmentDate = java.sql.Date.valueOf(nextWeekStartDate);
-                            Appointment newAppointment = new Appointment(
-                                calendar.getDoctor().getId(),
-                                appointmentDate.setHours(startHour)
-                            );
-                            appointmentRepo.save(newAppointment);
-                            calendar.getAppointments().put(newAppointment.getId(), newAppointment);
-                        }
-                    }
-                }
+                calendar.setAppointments(
+                    fillAppointments(
+                        currentDate.plusDays(7),
+                        currentDate.plusDays(14),
+                        calendar.getStartTime(),
+                        calendar.getEndTime(),
+                        calendar
+                    )
+                );
                 calendarRepo.save(calendar);
             }
         );
@@ -126,5 +105,28 @@ public class CalendarService implements ICalendarService {
         }
 
         return calendar;
+    }
+
+    private Map<Long, Appointment> fillAppointments(
+        LocalDate currentDate,
+        LocalDate endDate,
+        int startTime,
+        int endTime,
+        Calendar calendar
+    ) {
+        for (LocalDate startDate = currentDate; startDate.isBefore(endDate); startDate = startDate.plusDays(1)) {
+            if (startDate.getDayOfWeek().getValue() != 6 && startDate.getDayOfWeek().getValue() != 7) {
+                for (int startHour = startTime; startHour < endTime; startHour++) {
+                    Date appointmentDate = java.sql.Date.valueOf(startDate);
+                    Appointment newAppointment = new Appointment(
+                        calendar.getDoctor().getId(),
+                        appointmentDate.setHours(startHour)
+                    );
+                    appointmentRepo.save(newAppointment);
+                    calendar.getAppointments().put(newAppointment.getId(), newAppointment);
+                }
+            }
+        }
+        return calendar.getAppointments();
     }
 }
