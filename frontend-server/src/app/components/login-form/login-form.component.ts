@@ -32,7 +32,7 @@ export class LoginFormComponent implements OnInit {
     }
 
     signup(): void {
-        const userCreated = this.userService.createUser(this.loginForm.value.username, this.loginForm.value.usertype);
+        const userCreated = this.userService.createUser(this.loginForm.value.username, this.loginForm.value.password, this.loginForm.value.usertype);
 
         if (userCreated) {
             this.msgService.signup();

@@ -1,0 +1,14 @@
+<div class="d-flex flex-row flex-wrap rounded">
+    <div
+        *ngFor="let day of [].constructor(totalDays); index as i"
+        [class]="i >= currentDate.getDate() ? 'card border-0 rounded-none' : 'card-muted text-muted rounded-none'"
+    >
+        <div class="card-body">
+            <h5 class="card-title">{{ i + 1 }}</h5>
+            <p class="card-text text-wrap text-break">
+                1/15 free
+            </p>
+            <a *ngIf="i >= currentDate.getDay()" [routerLink]="'/hours/'.concat(i + 1)" class="stretched-link"></a>
+        </div>
+    </div>
+</div>

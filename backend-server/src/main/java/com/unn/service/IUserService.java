@@ -1,7 +1,9 @@
 package com.unn.service;
 
-import com.unn.model.User;
+import java.util.List;
 import java.util.Optional;
+import com.unn.constants.UserTypes;
+import com.unn.model.User;
 
 public interface IUserService {
     Optional<User> createUser(User user);
@@ -15,4 +17,6 @@ public interface IUserService {
     Optional<User> updateUser(User user);
 
     void clearTable();
+
+    Optional<List<User>> getAllByType(UserTypes type);
 }

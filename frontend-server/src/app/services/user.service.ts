@@ -1,6 +1,8 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { v4 as uuidv4 } from "uuid";
+import { UserTypes } from "../constants/user-types.enum";
 import { User } from "../models/user";
 import { AppointmentService } from "./appointment.service";
 
@@ -10,12 +12,17 @@ import { AppointmentService } from "./appointment.service";
 export class UserService {
     private users = new Map<string, User>();
 
-    constructor(private cookie: CookieService, private appointmentService: AppointmentService) {}
+    constructor(private cookie: CookieService, private appointmentService: AppointmentService, private http: HttpClient) {}
 
-    createUser(username: string, usertype: string) {
-        const user = new User(username, usertype);
+    createUser(username: string, password: string, usertype: UserTypes) {
+        const user = new User(username, password, usertype);
+        const uid = uuidv4();
 
-        const uid = this.findUser(user);
+        this.http.post<User>("/registration", user).subscribe(
+            user => {
+                
+            }
+        );
 
         if (uid != null) {
             this.cookie.set("AUTH", uid);
@@ -31,11 +38,11 @@ export class UserService {
     }
 
     findPatients() {
-        return this.findUsersOfType("Patient");
+        return this.findUsersOfType(UserTypes.PATIENT);
     }
 
     findDoctors() {
-        return this.findUsersOfType("Doctor");
+        return this.findUsersOfType(UserTypes.DOCTOR);
     }
 
     getLoggedUser() {
@@ -47,7 +54,7 @@ export class UserService {
         this.cookie.set("AUTH", uuid);
         this.users.set(uuid, user);
 
-        if (user.usertype == "Doctor") {
+        if (user.usertype == UserTypes.DOCTOR) {
             this.appointmentService.createAppointmentsFor(user.username);
         }
     }
@@ -66,7 +73,7 @@ export class UserService {
         return null;
     }
 
-    private findUsersOfType(type: string) {
+    private findUsersOfType(type: UserTypes) {
         const patients = new Map<string, User>();
         for (let user of this.users.entries()) {
             if (user[1].usertype == type) {

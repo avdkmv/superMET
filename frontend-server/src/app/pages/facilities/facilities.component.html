@@ -1,0 +1,14 @@
+<div class="facilities d-flex flex-row flex-wrap">
+    <div
+        *ngFor="let f of facilities; index as i"
+        [class]="i != facilities.length - 1 ? 'card shadow-sm mr-3' : 'card shadow-sm'"
+    >
+        <div class="card-body">
+            <h5 class="card-title">{{ f.name }}</h5>
+            <p class="card-text text-wrap text-break">
+                {{ f.description }}
+            </p>
+            <a [routerLink]="'/facility/'.concat(f.id)" class="stretched-link"></a>
+        </div>
+    </div>
+</div>

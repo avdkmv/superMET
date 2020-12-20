@@ -1,0 +1,14 @@
+<div class="facilities d-flex flex-row flex-wrap">
+    <div
+        *ngFor="let d of testdata; index as i"
+        [class]="i != testdata.length - 1 ? 'card shadow-sm mr-3' : 'card shadow-sm'"
+    >
+        <div class="card-body">
+            <h5 class="card-title">{{ d.name }}</h5>
+            <p class="card-text text-wrap text-break">
+                {{ d.description }}
+            </p>
+            <a [routerLink]="'/doctor/'.concat(d.id)" class="stretched-link"></a>
+        </div>
+    </div>
+</div>

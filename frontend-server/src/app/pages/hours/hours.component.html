@@ -1,0 +1,12 @@
+<div class="d-flex flex-row flex-wrap rounded">
+    <div
+        *ngFor="let hour of hours; index as i"
+        [class]="i != hours.length - 1 ? 'card shadow-sm mr-3' : 'card shadow-sm'"
+    >
+        <div class="card-body">
+            <h5 class="card-title">{{ hour.time }}</h5>
+            <p class="card-text"></p>
+            <a [routerLink]="'/appointment/'.concat(hour.id)" class="stretched-link"></a>
+        </div>
+    </div>
+</div>

@@ -1,11 +1,12 @@
 package com.unn.controller;
 
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
+import com.unn.constants.UserTypes;
 import com.unn.model.User;
 import com.unn.service.impl.UserService;
 import com.unn.service.impl.ValidationService;
-import java.util.Optional;
-import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/user")
@@ -78,6 +80,16 @@ public class UserController {
         Optional<User> deletedUser = userService.deleteUser(mail);
         if (deletedUser.isPresent()) {
             return ResponseEntity.ok(deletedUser.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/patients")
+    public ResponseEntity<List<User>> getAllPatients() {
+        Optional<List<User>> doctors = userService.getAllByType(UserTypes.PATIENT);
+        if (doctors.isPresent()) {
+            return ResponseEntity.ok(doctors.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

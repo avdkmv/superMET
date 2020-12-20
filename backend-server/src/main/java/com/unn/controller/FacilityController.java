@@ -34,7 +34,7 @@ public class FacilityController {
         }
     }
 
-    @GetMapping("/facilities")
+    @GetMapping("/all")
     public ResponseEntity<List<Facility>> getAllFacilities() {
         Optional<List<Facility>> facilities = facilityService.findAllfacilities();
         if (facilities.isPresent()) {

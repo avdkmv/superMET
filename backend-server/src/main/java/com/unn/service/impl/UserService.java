@@ -1,11 +1,13 @@
 package com.unn.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+import com.unn.constants.UserTypes;
 import com.unn.model.User;
 import com.unn.repository.UserRepo;
 import com.unn.service.IUserService;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +53,14 @@ public class UserService implements IUserService {
         Optional<User> updatedUser = userRepo.findByMail(user.getMail());
         updatedUser.get().setUsername(user.getUsername());
         updatedUser.get().setPassword(user.getPassword());
+
         userRepo.save(updatedUser.get());
         return updatedUser;
+    }
+
+    @Override
+    public Optional<List<User>> getAllByType(UserTypes type) {
+        return userRepo.findAllByUserTypeId(type.getId());
     }
 
     @Override

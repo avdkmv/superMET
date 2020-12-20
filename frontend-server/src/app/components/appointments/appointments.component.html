@@ -1,13 +1,13 @@
-<h1 *ngIf="user != null">{{ user.username }}</h1>
+<!-- <h1 *ngIf="user != null">{{ user.username }}</h1>
 <h1 *ngIf="user == null">You are not logged in</h1>
 
 <div class="mt-3 d-flex flex-row">
-    <div class="card shadow mr-2 ongoing" *ngFor="let a of ongoing; index as i">
+    <div class="card shadow mr-2 ongoing" *ngFor="let a of ongoing; index as i;">
         <div class="card-body">
             <h5 class="card-title">
                 {{ a.doctor }}
             </h5>
-            <h6 *ngIf="user.usertype == 'Doctor'" class="card-title">
+            <h6 *ngIf="user.usertype == usertypes.valueOf('DOCTOR')" class="card-title">
                 Patient: {{ a.patient }}
             </h6>
             <h6 class="card-subtitle">{{ a.date | date: "medium":"UTC" }}</h6>
@@ -20,14 +20,14 @@
             </h5>
             <h6 class="card-subtitle">{{ a.date | date: "medium":"UTC" }}</h6>
         </div>
-        <a *ngIf="user.usertype == 'Patient'" href="#" class="stretched-link" (click)="makeAppointment(a, $event)"></a>
+        <a *ngIf="user.usertype == usertypes.valueOf('PATIENT')" href="#" class="stretched-link" (click)="makeAppointment(a, $event)"></a>
     </div>
 </div>
 
 <button
-    *ngIf="user != null && user.usertype == 'Doctor'"
+    *ngIf="user != null && user.usertype == usertypes.valueOf('DOCTOR')"
     class="btn btn-outline-primary mt-3"
     (click)="createAppointment()"
 >
     Create appointment
-</button>
+</button> -->

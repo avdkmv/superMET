@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { HttpClientModule } from "@angular/common/http"
 import { NgModule } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -14,6 +15,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule } from "ngx-toastr";
 import { CookieService } from "ngx-cookie-service";
 import { AppointmentsComponent } from './components/appointments/appointments.component';
+import { FacilitiesComponent } from './pages/facilities/facilities.component';
+import { FacilityComponent } from './pages/facility/facility.component';
+import { DoctorComponent } from './pages/doctor/doctor.component';
+import { HoursComponent } from './pages/hours/hours.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +30,10 @@ import { AppointmentsComponent } from './components/appointments/appointments.co
         LoginFormComponent,
         LoginFormComponent,
         AppointmentsComponent,
+        FacilitiesComponent,
+        FacilityComponent,
+        DoctorComponent,
+        HoursComponent,
     ],
     imports: [
         BrowserModule,
@@ -34,6 +43,7 @@ import { AppointmentsComponent } from './components/appointments/appointments.co
         ToastrModule.forRoot({
             preventDuplicates: true,
         }),
+        HttpClientModule,
         NgbModule,
     ],
     providers: [CookieService],

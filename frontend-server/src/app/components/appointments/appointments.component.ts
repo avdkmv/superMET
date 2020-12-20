@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { UserTypes } from "src/app/constants/user-types.enum";
 import { Appointment } from "src/app/models/appointment";
 import { User } from "src/app/models/user";
 import { AppointmentService } from "src/app/services/appointment.service";
@@ -14,6 +15,8 @@ export class AppointmentsComponent implements OnInit {
     user: User;
     appointments = new Array<Appointment>();
     ongoing = new Array<Appointment>();
+
+    usertypes: UserTypes;
 
     constructor(
         private userService: UserService,
@@ -48,11 +51,11 @@ export class AppointmentsComponent implements OnInit {
     private updateAppointmentList() {
         if (this.user) {
             switch (this.user.usertype) {
-                case "Patient":
+                case UserTypes.PATIENT:
                     this.appointments = this.appointmentService.getAvailableAppointments();
                     this.ongoing = this.appointmentService.getAppointmentsForPatient(this.user.username);
                     break;
-                case "Doctor":
+                case UserTypes.DOCTOR:
                     this.appointments = this.appointmentService.getAppointmentsForDoctor(this.user.username);
                     this.ongoing = this.appointments.filter(a => a.patient != null);
                     break;
