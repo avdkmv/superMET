@@ -92,11 +92,8 @@ public class ValidationService implements IValidationService {
   }
 
   @Override
-  public boolean validateAppointmentCreation(Appointment appointment) {
-    return(
-      doctorRepo.findById(appointment.getDoctor().getId()).isPresent() &&
-      patientRepo.findById(appointment.getPatient().getId()).isPresent()
-    );
+  public boolean validateAppointmentCreation(Long doctorId) {
+    return doctorRepo.findById(doctorId).isPresent();
   }
 
   @Override

@@ -8,6 +8,6 @@ public interface IValidationService {
   boolean validateMessage(Message message);
   public boolean validateDocumentCreate(Document document);
   public boolean validateDocumentUpdate(Document document);
-  boolean validateAppointmentCreation(Appointment appointment);
+  boolean validateAppointmentCreation(Long doctorId);
   boolean validateChatCreation(Chat chat);
 }
