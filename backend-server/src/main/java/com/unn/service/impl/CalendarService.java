@@ -118,9 +118,10 @@ public class CalendarService implements ICalendarService {
             if (startDate.getDayOfWeek().getValue() != 6 && startDate.getDayOfWeek().getValue() != 7) {
                 for (int startHour = startTime; startHour < endTime; startHour++) {
                     Date appointmentDate = java.sql.Date.valueOf(startDate);
+                    appointmentDate.setHours(startHour)
                     Appointment newAppointment = new Appointment(
-                        calendar.getDoctor().getId(),
-                        appointmentDate.setHours(startHour)
+                        calendar.getDoctor(),
+                        appointmentDate
                     );
                     appointmentRepo.save(newAppointment);
                     calendar.getAppointments().put(newAppointment.getId(), newAppointment);
