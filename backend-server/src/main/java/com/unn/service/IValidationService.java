@@ -10,4 +10,6 @@ public interface IValidationService {
   public boolean validateDocumentUpdate(Document document);
   boolean validateAppointmentCreation(Long doctorId);
   boolean validateChatCreation(Chat chat);
+  boolean validateAppointment(Appointment appointment);
+  boolean validateWorkTime(int startTime, int endTime);
 }

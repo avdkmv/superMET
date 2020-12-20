@@ -18,8 +18,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 @NoArgsConstructor
@@ -41,4 +41,7 @@ public class Calendar {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private Map<Long, Appointment> appointments;
+
+  int startTime;
+  int endTime;
 }
