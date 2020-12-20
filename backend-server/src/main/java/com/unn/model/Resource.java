@@ -25,8 +25,11 @@ public class Resource {
 
   private String name;
 
-  private String link;
-
   @OneToOne(mappedBy = "resource")
   private Document document;
+
+  public Resource(String name, Document document) {
+    this.name = name;
+    this.document = document;
+  }
 }

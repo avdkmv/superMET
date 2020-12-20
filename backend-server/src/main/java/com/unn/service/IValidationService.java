@@ -6,8 +6,9 @@ public interface IValidationService {
   boolean validateUserCreation(User user);
   boolean validateUserUpdate(User user);
   boolean validateMessage(Message message);
-  boolean validateDocument(Document document);
-  boolean validateAppointmentCreation(Appointment appointment);
+  public boolean validateDocumentCreate(Document document);
+  public boolean validateDocumentUpdate(Document document);
+  boolean validateAppointmentCreation(Long doctorId);
   boolean validateChatCreation(Chat chat);
   boolean validateAppointment(Appointment appointment);
   boolean validateWorkTime(int startTime, int endTime);

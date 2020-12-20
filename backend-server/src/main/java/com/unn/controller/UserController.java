@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import lombok.RequiredArgsConstructor;
 
@@ -66,7 +67,7 @@ public class UserController {
     }
   }
 
-  @PostMapping("/{id}/delete")
+  @DeleteMapping("/{id}/delete")
   public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
     Optional<User> deletedUser = userService.deleteUser(id);
     if (deletedUser.isPresent()) {
@@ -76,7 +77,7 @@ public class UserController {
     }
   }
 
-  @PostMapping("/mail/{mail}/delete")
+  @DeleteMapping("/mail/{mail}/delete")
   public ResponseEntity<User> deleteUser(@PathVariable("mail") String mail) {
     Optional<User> deletedUser = userService.deleteUser(mail);
     if (deletedUser.isPresent()) {

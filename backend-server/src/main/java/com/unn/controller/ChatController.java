@@ -59,7 +59,7 @@ public class ChatController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<Chat> createChat(@RequestBody @Valid Chat chat) {
+  public ResponseEntity<Chat> createChat(@RequestBody Chat chat) {
     if (validationService.validateChatCreation(chat)) {
       chatService.createChat(chat);
       return ResponseEntity.ok(chat);

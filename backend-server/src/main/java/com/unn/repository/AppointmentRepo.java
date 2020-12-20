@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,5 +22,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 
     @Transactional
     void deleteByDoctorIdAndPatientId(Long doctorId, Long patientId);
-    public Optional<List<Appointment>> findAllByDoctorId(Long doctorId);
+    Optional<List<Appointment>> findAllByDoctorIdAndBusy(Long doctorId, boolean busy);
+    Optional<List<Appointment>> findAllByPatientIdAndBusy(Long doctorId, boolean busy);
 }
