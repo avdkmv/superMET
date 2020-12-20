@@ -6,6 +6,8 @@ import com.unn.repository.AppointmentRepo;
 import com.unn.repository.DoctorRepo;
 import com.unn.repository.PatientRepo;
 import com.unn.service.IAppointmentService;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +57,12 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
+    public Optional<Appointment> updateAppointment(Appointment appointment) {
+        appointmentRepo.save(appointment);
+        return Optional.of(appointment);
+    }
+
+    @Override
     public Optional<Appointment> newResult(Long appointmentId, Long documentId) {
         // TODO:  implement method
         return null;
@@ -84,5 +92,30 @@ public class AppointmentService implements IAppointmentService {
     @Override
     public Optional<List<Appointment>> findAllFreePatientAppointment(Long patientId) {
         return appointmentRepo.findAllByPatientIdAndBusy(patientId, false);
+    }
+
+    @Override
+    public Optional<List<Appointment>> findAllFreeAppointmentsByDay(Long day) {
+        List<Appointment> allAppointments = appointmentRepo.findAll();
+        List<Appointment> retAppointments = new ArrayList<Appointment>();
+        for (int i = 0; i < allAppointments.size(); i++) {
+            if (allAppointments.get(i).getDate().getDate() == day && !allAppointments.get(i).isBusy()) {
+                retAppointments.add(allAppointments.get(i));
+            }
+        }
+        return Optional.of(retAppointments);
+    }
+
+    @Override
+    public Optional<String> getRatioFreeAllByDay(Long day) {
+        String ratio;
+        List<Appointment> allAppointments = appointmentRepo.findAll();
+        Optional<List<Appointment>> freeAppointments = findAllFreeAppointmentsByDay(day);
+        if (freeAppointments.isEmpty()) {
+            ratio = "0/" + allAppointments.size();
+        } else {
+            ratio = freeAppointments.get().size() + "/" + allAppointments.size();
+        }
+        return Optional.of(ratio);
     }
 }

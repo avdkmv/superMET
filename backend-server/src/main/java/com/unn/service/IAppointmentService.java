@@ -17,6 +17,11 @@ public interface IAppointmentService {
     Optional<List<Appointment>> findAllBusyPatientAppointment(Long patientId);
     Optional<List<Appointment>> findAllFreePatientAppointment(Long patientId);
 
+    Optional<List<Appointment>> findAllFreeAppointmentsByDay(Long day);
+    Optional<String> getRatioFreeAllByDay(Long day);
+
+    Optional<Appointment> updateAppointment(Appointment appointment);
+
     Optional<Appointment> deleteAppointment(Long appointmentId);
     Optional<Appointment> deleteAppointment(Long doctorId, Long patientId);
 
