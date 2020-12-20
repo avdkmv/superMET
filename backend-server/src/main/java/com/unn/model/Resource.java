@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,17 +18,17 @@ import lombok.Setter;
 @Entity
 @Table(name = "s_resource")
 public class Resource {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String name;
+    private String name;
 
-  @OneToOne(mappedBy = "resource")
-  private Document document;
+    @OneToOne(mappedBy = "resource")
+    private Document document;
 
-  public Resource(String name, Document document) {
-    this.name = name;
-    this.document = document;
-  }
+    public Resource(String name, Document document) {
+        this.name = name;
+        this.document = document;
+    }
 }

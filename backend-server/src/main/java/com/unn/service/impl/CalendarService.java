@@ -1,11 +1,5 @@
 package com.unn.service.impl;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.unn.model.Appointment;
 import com.unn.model.Calendar;
 import com.unn.model.Doctor;
@@ -13,12 +7,15 @@ import com.unn.repository.AppointmentRepo;
 import com.unn.repository.CalendarRepo;
 import com.unn.repository.DoctorRepo;
 import com.unn.service.ICalendarService;
-
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -119,10 +116,7 @@ public class CalendarService implements ICalendarService {
                 for (int startHour = startTime; startHour < endTime; startHour++) {
                     Date appointmentDate = java.sql.Date.valueOf(startDate);
                     appointmentDate.setHours(startHour);
-                    Appointment newAppointment = new Appointment(
-                        calendar.getDoctor(),
-                        appointmentDate
-                    );
+                    Appointment newAppointment = new Appointment(calendar.getDoctor(), appointmentDate);
                     appointmentRepo.save(newAppointment);
                     calendar.getAppointments().put(newAppointment.getId(), newAppointment);
                 }

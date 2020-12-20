@@ -5,22 +5,22 @@ language: java
 jdk: openjdk11
 
 services:
-  - postgresql
+    - postgresql
 
 before_script:
-  - createdb -h localhost -p 5432 -U postgres superMET
+    - createdb -h localhost -p 5432 -U postgres superMET
 
 env:
-  global:
-    - PGUSER=postgres
-    - PGPORT=5432
+    global:
+        - PGUSER=postgres
+        - PGPORT=5432
 
 install:
-  - mvn --projects ./backend-server clean install -DskipTests
+    - mvn --projects ./backend-server clean install -DskipTests
 
 script:
-  - cd backend-server
-  - mvn test -B
+    - cd backend-server
+    - mvn test -B
 
 notifications:
-  email: false
+    email: false
