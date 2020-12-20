@@ -40,4 +40,12 @@ public class Appointment {
   private Date date;
 
   private Long code;
+
+  private boolean busy;
+
+  public Appointment(Doctor doctor, Date date) {
+    this.doctor = doctor;
+    this.date = date;
+    this.busy = false;
+  }
 }

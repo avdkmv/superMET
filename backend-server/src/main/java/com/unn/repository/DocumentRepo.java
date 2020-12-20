@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DocumentRepo extends JpaRepository<Document, Long> {
-    Optional<Document> findDocumentByResourceId(Long resourceId);
+    Optional<Document> findByResourceId(Long resourceId);
+    Optional<Document> findByNumber(String number);
 }

@@ -1,14 +1,13 @@
 package com.unn.service;
 
-import com.unn.model.Appointment;
-import com.unn.model.Document;
-import com.unn.model.Message;
-import com.unn.model.User;
+import com.unn.model.*;
 
 public interface IValidationService {
   boolean validateUserCreation(User user);
   boolean validateUserUpdate(User user);
   boolean validateMessage(Message message);
-  boolean validateDocument(Document document);
-  boolean validateAppointment(Appointment appointment);
+  public boolean validateDocumentCreate(Document document);
+  public boolean validateDocumentUpdate(Document document);
+  boolean validateAppointmentCreation(Long doctorId);
+  boolean validateChatCreation(Chat chat);
 }
