@@ -11,4 +11,6 @@ public interface IValidationService {
   boolean validateAppointmentCreation(Long doctorId);
   boolean validateChatCreation(Chat chat);
   boolean validateFacilityCreation(Facility facility);
+  boolean validateAppointment(Appointment appointment);
+  boolean validateWorkTime(int startTime, int endTime);
 }
