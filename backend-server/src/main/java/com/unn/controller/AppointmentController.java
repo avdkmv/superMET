@@ -22,6 +22,17 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final ValidationService validationService;
 
+    @GetMapping("/create/{id}")
+    public ResponseEntity<Appointment> setAppointmentAsBusy(@PathVariable(name = "id") Long id) {
+        Optional<Appointment> appointment = appointmentService.findAppointment(id);
+        if (appointment.isPresent()) {
+            appointment.get().setBusy(true);
+            return ResponseEntity.ok(appointmentService.updateAppointment(appointment.get()).get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointment(@PathVariable(name = "id") Long id) {
         Optional<Appointment> appointment = appointmentService.findAppointment(id);
@@ -116,6 +127,26 @@ public class AppointmentController {
         Optional<List<Appointment>> appointments = appointmentService.findAllBusyPatientAppointment(id);
         if (appointments.isPresent()) {
             return ResponseEntity.ok(appointments.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/day/free/{day}")
+    public ResponseEntity<List<Appointment>> getFreeAppointmentByDay(@PathVariable(name = "day") Long day) {
+        Optional<List<Appointment>> appointments = appointmentService.findAllFreeAppointmentsByDay(day);
+        if (appointments.isPresent()) {
+            return ResponseEntity.ok(appointments.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/day/free/ratio/{day}")
+    public ResponseEntity<String> getRatioByDay(@PathVariable(name = "day") Long day) {
+        Optional<String> ratio = appointmentService.getRatioFreeAllByDay(day);
+        if (ratio.isPresent()) {
+            return ResponseEntity.ok(ratio.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
