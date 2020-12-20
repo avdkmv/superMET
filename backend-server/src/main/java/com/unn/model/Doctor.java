@@ -54,6 +54,12 @@ public class Doctor {
   @Column(columnDefinition = "jsonb")
   private List<Long> documentIds;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "facility_id")
+  private Facility facility;
+
+  private String description;
+
   @OneToMany(
     fetch = FetchType.EAGER,
     mappedBy = "doctor",

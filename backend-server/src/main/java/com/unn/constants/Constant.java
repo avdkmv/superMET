@@ -10,6 +10,7 @@ public interface Constant {
      */
 
     public final int USER_PARAMS_SIZE = 127;
+    public final int FACILITY_PARAM_SIZE = 127;
     public final int DOCUMENT_NUMBER_SIZE = 127;
     public final int DESCRIPTION_SIZE = 1023;
 

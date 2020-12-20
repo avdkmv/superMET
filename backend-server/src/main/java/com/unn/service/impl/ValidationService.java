@@ -1,24 +1,23 @@
 package com.unn.service.impl;
 
 import com.unn.constants.Constant;
-
 import com.unn.model.Chat;
-import com.unn.model.Appointment;
 import com.unn.model.Document;
+import com.unn.model.Facility;
 import com.unn.model.Message;
 import com.unn.model.User;
-import com.unn.repository.DocumentRepo;
 import com.unn.repository.AppointmentRepo;
 import com.unn.repository.DoctorRepo;
+import com.unn.repository.DocumentRepo;
+import com.unn.repository.FacilityRepo;
 import com.unn.repository.PatientRepo;
 import com.unn.repository.UserRepo;
 import com.unn.service.IValidationService;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +27,7 @@ public class ValidationService implements IValidationService {
   private final AppointmentRepo appointmentRepo;
   private final DoctorRepo doctorRepo;
   private final PatientRepo patientRepo;
+  private final FacilityRepo facilityRepo;
 
   @Override
   public boolean validateUserCreation(User user) {
@@ -102,6 +102,16 @@ public class ValidationService implements IValidationService {
       doctorRepo.findById(chat.getDoctor().getId()).isPresent() &&
       patientRepo.findById(chat.getPatient().getId()).isPresent()
     );
+  }
+
+  @Override
+  public boolean validateFacilityCreation(Facility facility) {
+    if (facility != null) {
+      return isStringParamsValid(Constant.FACILITY_PARAM_SIZE, facility.getName())
+      && isStringParamsValid(Constant.DESCRIPTION_SIZE, facility.getDescription())
+      && facilityRepo.findByName(facility.getName()).isEmpty();
+    }
+    return false;
   }
 
   private boolean isStringParamsValid(int allowedSize, String... params) {
