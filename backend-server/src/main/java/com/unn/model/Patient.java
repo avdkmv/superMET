@@ -1,11 +1,7 @@
 package com.unn.model;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,44 +11,35 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "s_patient")
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class Patient {
+@DynamicUpdate
+public class Patient extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    private List<Long> documentIds;
-
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    private Map<Long, Appointment> appointments;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "patient")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Appointment> appointmentIds;
+    @JsonIgnore
+    private List<Appointment> appointments = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "patient")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Appointment> chatIds;
+    @JsonIgnore
+    private List<Appointment> chats = new ArrayList<>();
 }

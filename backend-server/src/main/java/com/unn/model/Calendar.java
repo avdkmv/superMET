@@ -1,41 +1,37 @@
 package com.unn.model;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import java.util.Map;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicUpdate;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "s_calendar")
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@DynamicUpdate
 public class Calendar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "doctor_id")
+    @JsonIgnore
     private Doctor doctor;
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
+    @OneToMany(mappedBy = "calendar")
+    @JsonBackReference
     private Map<Long, Appointment> appointments;
 
     int startTime;

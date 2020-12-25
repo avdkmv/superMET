@@ -1,46 +1,34 @@
 package com.unn.controller;
 
+import java.util.List;
 import com.unn.model.Appointment;
 import com.unn.service.impl.AppointmentService;
-import com.unn.service.impl.ValidationService;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.unn.service.impl.ResponseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/appointment")
 @RequiredArgsConstructor
 public class AppointmentController {
     private final AppointmentService appointmentService;
-    private final ValidationService validationService;
 
-    @GetMapping("/create/{id}")
-    public ResponseEntity<Appointment> setAppointmentAsBusy(@PathVariable(name = "id") Long id) {
-        Optional<Appointment> appointment = appointmentService.findAppointment(id);
-        if (appointment.isPresent()) {
-            appointment.get().setBusy(true);
-            return ResponseEntity.ok(appointmentService.updateAppointment(appointment.get()).get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    private final ResponseService responseService;
+
+    @PostMapping("/create/{id}")
+    public ResponseEntity<Appointment> makeAppointment(@PathVariable(name = "id") Long id) {
+        return responseService.handleGetResponse(appointmentService.makeAppointment(id));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointment(@PathVariable(name = "id") Long id) {
-        Optional<Appointment> appointment = appointmentService.findAppointment(id);
-        if (appointment.isPresent()) {
-            return ResponseEntity.ok(appointment.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleGetResponse(appointmentService.findAppointment(id));
     }
 
     @GetMapping("/doctor/{doctorId}/patient/{patientId}")
@@ -48,22 +36,12 @@ public class AppointmentController {
         @PathVariable(name = "doctorId") Long doctorId,
         @PathVariable(name = "patientId") Long patientId
     ) {
-        Optional<Appointment> appointment = appointmentService.findAppointment(doctorId, patientId);
-        if (appointment.isPresent()) {
-            return ResponseEntity.ok(appointment.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleGetResponse(appointmentService.findAppointment(doctorId, patientId));
     }
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Appointment> deleteAppointment(@PathVariable(name = "id") Long id) {
-        Optional<Appointment> appointment = appointmentService.deleteAppointment(id);
-        if (appointment.isPresent()) {
-            return ResponseEntity.ok(appointment.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleDeleteResponse(appointmentService.deleteAppointment(id));
     }
 
     @DeleteMapping("/doctor/{doctorId}/patient/{patientId}/delete")
@@ -71,84 +49,50 @@ public class AppointmentController {
         @PathVariable(name = "doctorId") Long doctorId,
         @PathVariable(name = "patientId") Long patientId
     ) {
-        Optional<Appointment> appointment = appointmentService.deleteAppointment(doctorId, patientId);
-        if (appointment.isPresent()) {
-            return ResponseEntity.ok(appointment.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleDeleteResponse(appointmentService.deleteAppointment(doctorId, patientId));
     }
 
-    @GetMapping("/create/doctor/{doctorId}/date/{date}")
-    public ResponseEntity<Appointment> createAppointment(
-        @PathVariable(name = "doctorId") Long doctorId,
-        @PathVariable(name = "date") Date date
-    ) {
-        if (validationService.validateAppointmentCreation(doctorId)) {
-            Optional<Appointment> appointment = appointmentService.createAppointment(doctorId, date);
-            return ResponseEntity.ok(appointment.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    // @PostMapping("/create/doctor/{doctorId}/date/{date}")
+    // public ResponseEntity<Appointment> createAppointment(
+    //     @PathVariable(name = "doctorId") Long doctorId,
+    //     @PathVariable(name = "date") Date date
+    // ) {
+    //     return responseService.handlePostResponse(appointmentService.createAppointment(doctorId, date));
+    // }
+
+    @GetMapping("/doctor/{id}/free")
+    public ResponseEntity<List<Appointment>> getDoctorFreeAppointments(@PathVariable(name = "id") Long id) {
+        return responseService.handleGetResponse(appointmentService.findFreeAppointmentsByDoctor(id));
     }
 
-    @GetMapping("/doctor/free/{id}")
-    public ResponseEntity<List<Appointment>> getDoctorFreeAppointment(@PathVariable(name = "id") Long id) {
-        Optional<List<Appointment>> appointments = appointmentService.findAllFreeDoctorAppointment(id);
-        if (appointments.isPresent()) {
-            return ResponseEntity.ok(appointments.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @GetMapping("/doctor/busy/{id}")
+    @GetMapping("/doctor/{id}/busy")
     public ResponseEntity<List<Appointment>> getDoctorBusyAppointment(@PathVariable(name = "id") Long id) {
-        Optional<List<Appointment>> appointments = appointmentService.findAllBusyDoctorAppointment(id);
-        if (appointments.isPresent()) {
-            return ResponseEntity.ok(appointments.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleGetResponse(appointmentService.findBusyAppointmentsByDoctor(id));
     }
 
-    @GetMapping("/patient/free/{id}")
+    @GetMapping("/doctor/{id}/free/{day}")
+    public ResponseEntity<List<Appointment>> getFreeAppointmentByDay(
+        @PathVariable(name = "day") Long day,
+        @PathVariable(name = "id") Long doctorId
+    ) {
+        return responseService.handleGetResponse(appointmentService.findFreeAppointmentsByDay(day, doctorId));
+    }
+
+    @GetMapping("/doctor/{id}/free/{day}/ratio")
+    public ResponseEntity<String> getRatioByDay(
+        @PathVariable(name = "day") Long day,
+        @PathVariable(name = "id") Long doctorId
+    ) {
+        return responseService.handleGetResponse(appointmentService.countFreeAppointmetnsPerDay(day, doctorId));
+    }
+
+    @GetMapping("/patient/{id}/free")
     public ResponseEntity<List<Appointment>> getPatientFreeAppointment(@PathVariable(name = "id") Long id) {
-        Optional<List<Appointment>> appointments = appointmentService.findAllFreePatientAppointment(id);
-        if (appointments.isPresent()) {
-            return ResponseEntity.ok(appointments.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleGetResponse(appointmentService.findFreeAppointmentsByPatient(id));
     }
 
-    @GetMapping("/patient/busy/{id}")
+    @GetMapping("/patient/{id}/busy")
     public ResponseEntity<List<Appointment>> getPatientBusyAppointment(@PathVariable(name = "id") Long id) {
-        Optional<List<Appointment>> appointments = appointmentService.findAllBusyPatientAppointment(id);
-        if (appointments.isPresent()) {
-            return ResponseEntity.ok(appointments.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @GetMapping("/day/free/{day}")
-    public ResponseEntity<List<Appointment>> getFreeAppointmentByDay(@PathVariable(name = "day") Long day) {
-        Optional<List<Appointment>> appointments = appointmentService.findAllFreeAppointmentsByDay(day);
-        if (appointments.isPresent()) {
-            return ResponseEntity.ok(appointments.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @GetMapping("/day/free/ratio/{day}")
-    public ResponseEntity<String> getRatioByDay(@PathVariable(name = "day") Long day) {
-        Optional<String> ratio = appointmentService.getRatioFreeAllByDay(day);
-        if (ratio.isPresent()) {
-            return ResponseEntity.ok(ratio.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleGetResponse(appointmentService.findBusyAppointmentsByPatient(id));
     }
 }

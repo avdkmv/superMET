@@ -4,7 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import com.unn.constants.UserTypes;
+import com.unn.dto.SignupRequest;
+import com.unn.model.Doctor;
+import com.unn.model.Patient;
 import com.unn.model.User;
+import com.unn.service.impl.ResponseService;
 import com.unn.service.impl.UserService;
 import com.unn.service.impl.ValidationService;
 import org.springframework.http.HttpStatus;
@@ -24,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     private final UserService userService;
     private final ValidationService validationService;
+    private final ResponseService responseService;
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
@@ -33,6 +38,24 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<Doctor> getDoctor(@PathVariable("id") Long id) {
+        return responseService.handleGetResponse(userService.getDoctor(id));
+    }
+
+    @PostMapping("/doctor/{doctor_id}/facility/{facility_id}")
+    public ResponseEntity<Doctor> attachDoctorToFacility(
+        @PathVariable("doctor_id") Long doctorId,
+        @PathVariable("facility_id") Long facilityId
+    ) {
+        return responseService.handlePostResponse(userService.attachDoctorToFacility(doctorId, facilityId));
+    }
+
+    @GetMapping("/patient/{id}")
+    public ResponseEntity<Patient> getPatient(@PathVariable("id") Long id) {
+        return responseService.handleGetResponse(userService.getPatient(id));
     }
 
     @GetMapping("/mail/{mail}")
@@ -45,14 +68,9 @@ public class UserController {
         }
     }
 
-    @PostMapping("/registration")
-    public ResponseEntity<User> registration(@RequestBody @Valid User user) {
-        if (validationService.validateUserCreation(user)) {
-            userService.createUser(user);
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @PostMapping("/signup")
+    public ResponseEntity<User> signup(@RequestBody SignupRequest request) {
+        return responseService.handlePostResponse(userService.createUser(request));
     }
 
     @PostMapping("/edit")

@@ -2,10 +2,12 @@ package com.unn.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import com.unn.model.User;
-import com.unn.service.impl.UserService;
 import java.util.Optional;
+import com.unn.constants.UserTypes;
+import com.unn.dto.SignupRequest;
+import com.unn.model.User;
+import com.unn.repository.UserTypeRepo;
+import com.unn.service.impl.UserService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,11 +20,14 @@ public class UserControllerTest extends AbstractControllerTest {
     @Autowired
     private UserService userService;
 
-    private final Long userTypeId = 0L;
+    @Autowired
+    private UserTypeRepo userTypeRepo;
+
+    private final Long userTypeId = UserTypes.PATIENT.getId();
     private final String username = "username";
     private final String password = "password";
     private final String mail = "mail";
-    private final User user = new User(userTypeId, username, password, mail);
+    private final User user = new User(userTypeRepo.getOne(userTypeId), username, password, mail);
 
     @Override
     @Before
@@ -38,7 +43,9 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void getExistingUserByIdTest() throws Exception {
-        Optional<User> retUser = userService.createUser(user);
+        Optional<User> retUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
 
         String url = "/user/" + retUser.get().getId();
         MvcResult mvcResult = mvc
@@ -68,7 +75,9 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void getExistingUserByMailTest() throws Exception {
-        Optional<User> retUser = userService.createUser(user);
+        Optional<User> retUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
 
         String url = "/user/mail/" + retUser.get().getMail();
         MvcResult mvcResult = mvc
@@ -98,7 +107,9 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void deleteExistingUserByIdTest() throws Exception {
-        Optional<User> retUser = userService.createUser(user);
+        Optional<User> retUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
 
         Long userId = retUser.get().getId();
         String url = "/user/" + userId + "/delete";
@@ -122,7 +133,9 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void deleteExistingUserByMailTest() throws Exception {
-        Optional<User> retUser = userService.createUser(user);
+        Optional<User> retUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
 
         String userMail = retUser.get().getMail();
         String url = "/user/mail/" + userMail + "/delete";
@@ -165,7 +178,7 @@ public class UserControllerTest extends AbstractControllerTest {
     public void registrationNotValidUserTest() throws Exception {
         String url = "/user/registration";
         User notValidUser = user;
-        notValidUser.setUserTypeId(null);
+        notValidUser.setType(null);
         String jsonToSend = super.mapToJson(notValidUser);
         MvcResult mvcResult = mvc
             .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
@@ -177,7 +190,9 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void editTest() throws Exception {
-        Optional<User> retUser = userService.createUser(user);
+        Optional<User> retUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
         final String usernameUpd = "usernameUpd";
         final String passwordUpd = "passwordUpd";
         User editUser = retUser.get();
@@ -201,7 +216,9 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void editNotValidUserTest() throws Exception {
-        Optional<User> retUser = userService.createUser(user);
+        Optional<User> retUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
         final String usernameUpd = "usernameUpd";
         final String passwordUpd = "passwordUpd";
         final String mailUpd = "mailUpd";

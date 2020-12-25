@@ -1,45 +1,41 @@
 package com.unn.service.impl;
 
+import java.util.Optional;
 import com.unn.constants.Constant;
-import com.unn.model.Appointment;
+import com.unn.dto.SignupRequest;
 import com.unn.model.Chat;
 import com.unn.model.Document;
 import com.unn.model.Facility;
 import com.unn.model.Message;
 import com.unn.model.User;
-import com.unn.repository.AppointmentRepo;
+import com.unn.model.UserType;
 import com.unn.repository.DoctorRepo;
 import com.unn.repository.DocumentRepo;
 import com.unn.repository.FacilityRepo;
 import com.unn.repository.PatientRepo;
 import com.unn.repository.UserRepo;
 import com.unn.service.IValidationService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ValidationService implements IValidationService {
     private final UserRepo userRepo;
     private final DocumentRepo documentRepo;
-    private final AppointmentRepo appointmentRepo;
+    // private final AppointmentRepo appointmentRepo;
     private final DoctorRepo doctorRepo;
     private final PatientRepo patientRepo;
     private final FacilityRepo facilityRepo;
 
     @Override
-    public boolean validateUserCreation(User user) {
-        if (user != null) {
+    public boolean validateUserCreation(Optional<UserType> type, SignupRequest req) {
+        if (type.isPresent()) {
             return (
-                user.getUserTypeId() != null &&
-                isStringParamsValid(
-                    Constant.USER_PARAMS_SIZE,
-                    user.getUsername(),
-                    user.getPassword(),
-                    user.getMail()
-                ) &&
-                userRepo.findByMail(user.getMail()).isEmpty()
+                isStringParamsValid(Constant.USER_PARAMS_SIZE, req.getUsername(), req.getPassword(), req.getEmail()) &&
+                userRepo.findByMail(req.getEmail()).isEmpty() &&
+                userRepo.findByUsername(req.getUsername()).isEmpty()
             );
         } else {
             return false;

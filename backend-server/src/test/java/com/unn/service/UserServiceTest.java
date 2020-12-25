@@ -2,10 +2,12 @@ package com.unn.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import com.unn.model.User;
-import com.unn.service.impl.UserService;
 import java.util.Optional;
+import com.unn.constants.UserTypes;
+import com.unn.dto.SignupRequest;
+import com.unn.model.User;
+import com.unn.repository.UserTypeRepo;
+import com.unn.service.impl.UserService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,11 +22,14 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    private final Long userTypeId = 0L;
+    @Autowired
+    private UserTypeRepo userTypeRepo;
+
+    private final Long userTypeId = UserTypes.PATIENT.getId();
     private final String username = "username";
     private final String password = "password";
     private final String mail = "mail";
-    private final User user = new User(userTypeId, username, password, mail);
+    private final User user = new User(userTypeRepo.getOne(userTypeId), username, password, mail);
 
     @Before
     @After
@@ -34,7 +39,9 @@ public class UserServiceTest {
 
     @Test
     public void createUserTest() {
-        Optional<User> createdUser = userService.createUser(user);
+        Optional<User> createdUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
         assertEquals(createdUser.get().getUsername(), username);
         assertEquals(createdUser.get().getPassword(), password);
         assertEquals(createdUser.get().getMail(), mail);
@@ -42,36 +49,44 @@ public class UserServiceTest {
 
     @Test
     public void findUserByIdTest() {
-        Optional<User> createdUser = userService.createUser(user);
-        Optional<User> retUser = userService.findUser(createdUser.get().getId());
-        assertEquals(retUser.get().getUsername(), username);
-        assertEquals(retUser.get().getPassword(), password);
-        assertEquals(retUser.get().getMail(), mail);
+        Optional<User> createdUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
+        Optional<User> user = userService.findUser(createdUser.get().getId());
+        assertEquals(user.get().getUsername(), username);
+        assertEquals(user.get().getPassword(), password);
+        assertEquals(user.get().getMail(), mail);
     }
 
     @Test
     public void findUserByMailTest() {
-        Optional<User> createdUser = userService.createUser(user);
-        Optional<User> retUser = userService.findUser(createdUser.get().getMail());
-        assertEquals(retUser.get().getUsername(), username);
-        assertEquals(retUser.get().getPassword(), password);
-        assertEquals(retUser.get().getMail(), mail);
+        Optional<User> createdUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
+        Optional<User> user = userService.findUser(createdUser.get().getMail());
+        assertEquals(user.get().getUsername(), username);
+        assertEquals(user.get().getPassword(), password);
+        assertEquals(user.get().getMail(), mail);
     }
 
     @Test
     public void deleteUserByIdTest() {
-        Optional<User> createdUser = userService.createUser(user);
+        Optional<User> createdUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
         userService.deleteUser(createdUser.get().getId());
-        Optional<User> retUser = userService.findUser(mail);
-        assertTrue(retUser.isEmpty());
+        Optional<User> user = userService.findUser(mail);
+        assertTrue(user.isEmpty());
     }
 
     @Test
     public void deleteUserByMailTest() {
-        Optional<User> createdUser = userService.createUser(user);
+        Optional<User> createdUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
         userService.deleteUser(createdUser.get().getMail());
-        Optional<User> retUser = userService.findUser(mail);
-        assertTrue(retUser.isEmpty());
+        Optional<User> user = userService.findUser(mail);
+        assertTrue(user.isEmpty());
     }
 
     @Test
@@ -79,14 +94,16 @@ public class UserServiceTest {
         final String usernameNew = "username1";
         final String passwordNew = "password1";
 
-        Optional<User> createdUser = userService.createUser(user);
+        Optional<User> createdUser = userService.createUser(
+            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
+        );
         User modifyUser = createdUser.get();
         modifyUser.setUsername(usernameNew);
         modifyUser.setPassword(passwordNew);
         userService.updateUser(modifyUser);
-        Optional<User> retUser = userService.findUser(mail);
-        assertEquals(retUser.get().getUsername(), usernameNew);
-        assertEquals(retUser.get().getPassword(), passwordNew);
-        assertEquals(retUser.get().getMail(), mail);
+        Optional<User> user = userService.findUser(mail);
+        assertEquals(user.get().getUsername(), usernameNew);
+        assertEquals(user.get().getPassword(), passwordNew);
+        assertEquals(user.get().getMail(), mail);
     }
 }

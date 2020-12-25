@@ -1,10 +1,11 @@
 package com.unn.service;
 
-import com.unn.model.Calendar;
 import java.util.Optional;
+import com.unn.model.Calendar;
+import com.unn.model.Doctor;
 
 public interface ICalendarService {
-    Optional<Calendar> createCalendarByDoctorID(Long doctorId, int startTime, int endTime);
+    Optional<Calendar> createCalendarByDoctorId(Doctor dcotor, int startTime, int endTime);
 
     Optional<Calendar> findCalendar(Long calendarId);
 

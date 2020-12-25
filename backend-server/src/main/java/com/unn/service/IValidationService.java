@@ -1,9 +1,16 @@
 package com.unn.service;
 
-import com.unn.model.*;
+import java.util.Optional;
+import com.unn.dto.SignupRequest;
+import com.unn.model.Chat;
+import com.unn.model.Document;
+import com.unn.model.Facility;
+import com.unn.model.Message;
+import com.unn.model.User;
+import com.unn.model.UserType;
 
 public interface IValidationService {
-    boolean validateUserCreation(User user);
+    boolean validateUserCreation(Optional<UserType> type, SignupRequest req);
     boolean validateUserUpdate(User user);
     boolean validateMessage(Message message);
 

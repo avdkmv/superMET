@@ -1,24 +1,23 @@
 package com.unn.service;
 
-import com.unn.model.Appointment;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import com.unn.model.Appointment;
 
 public interface IAppointmentService {
-    Optional<Appointment> createAppointment(Long doctorId, Date date);
+    // Optional<Appointment> createAppointment(Long doctorId, Date date);
 
     Optional<Appointment> findAppointment(Long appointmentId);
     Optional<Appointment> findAppointment(Long doctorId, Long patientId);
 
-    Optional<List<Appointment>> findAllBusyDoctorAppointment(Long doctorId);
-    Optional<List<Appointment>> findAllFreeDoctorAppointment(Long doctorId);
+    Optional<List<Appointment>> findBusyAppointmentsByDoctor(Long doctorId);
+    Optional<List<Appointment>> findFreeAppointmentsByDoctor(Long doctorId);
 
-    Optional<List<Appointment>> findAllBusyPatientAppointment(Long patientId);
-    Optional<List<Appointment>> findAllFreePatientAppointment(Long patientId);
+    Optional<List<Appointment>> findBusyAppointmentsByPatient(Long patientId);
+    Optional<List<Appointment>> findFreeAppointmentsByPatient(Long patientId);
 
-    Optional<List<Appointment>> findAllFreeAppointmentsByDay(Long day);
-    Optional<String> getRatioFreeAllByDay(Long day);
+    Optional<List<Appointment>> findFreeAppointmentsByDay(Long day, Long doctorId);
+    Optional<String> countFreeAppointmetnsPerDay(Long day, Long doctorId);
 
     Optional<Appointment> updateAppointment(Appointment appointment);
 
