@@ -48,8 +48,6 @@ public class UserServiceTest {
         calendarService.clearTable();
         facilityRepo.deleteAll();
         userService.clearUserTable();
-        userService.clearDoctorTable();
-        userService.clearPatientTable();
     }
 
     @Test
@@ -65,7 +63,7 @@ public class UserServiceTest {
         assertEquals(username, dbUser.get().getUsername());
         assertEquals(password, dbUser.get().getPassword());
         assertEquals(mail, dbUser.get().getMail());
-        assertEquals(UserTypes.DOCTOR.getId(), dbUser.get().getType().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), dbUser.get().getType().getId());
     }
 
     @Test
@@ -79,7 +77,7 @@ public class UserServiceTest {
         assertEquals(username, dbUser.get().getUsername());
         assertEquals(password, dbUser.get().getPassword());
         assertEquals(mail, dbUser.get().getMail());
-        assertEquals(UserTypes.PATIENT.getId(), dbUser.get().getType().getId());
+        assertEquals((Long)UserTypes.PATIENT.getId(), dbUser.get().getType().getId());
     }
 
     @Test
@@ -92,7 +90,7 @@ public class UserServiceTest {
         assertEquals(username, dbUser.get().getUsername());
         assertEquals(password, dbUser.get().getPassword());
         assertEquals(mail, dbUser.get().getMail());
-        assertEquals(UserTypes.DOCTOR.getId(), dbUser.get().getType().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), dbUser.get().getType().getId());
     }
 
     @Test
@@ -105,7 +103,7 @@ public class UserServiceTest {
         assertEquals(username, dbUser.get().getUsername());
         assertEquals(password, dbUser.get().getPassword());
         assertEquals(mail, dbUser.get().getMail());
-        assertEquals(UserTypes.PATIENT.getId(), dbUser.get().getType().getId());
+        assertEquals((Long)UserTypes.PATIENT.getId(), dbUser.get().getType().getId());
     }
 
     // TODO: fix cascade delete
@@ -173,7 +171,7 @@ public class UserServiceTest {
         assertEquals(usernameNew, dbUser.get().getUsername());
         assertEquals(passwordNew, dbUser.get().getPassword());
         assertEquals(mail, dbUser.get().getMail());
-        assertEquals(UserTypes.DOCTOR.getId(), dbUser.get().getType().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), dbUser.get().getType().getId());
     }
 
     @Test
@@ -193,7 +191,7 @@ public class UserServiceTest {
         assertEquals(usernameNew, dbUser.get().getUsername());
         assertEquals(passwordNew, dbUser.get().getPassword());
         assertEquals(mail, dbUser.get().getMail());
-        assertEquals(UserTypes.PATIENT.getId(), dbUser.get().getType().getId());
+        assertEquals((Long)UserTypes.PATIENT.getId(), dbUser.get().getType().getId());
     }
 
     @Test
@@ -211,7 +209,7 @@ public class UserServiceTest {
             assertEquals(username + i, allPatient.get(i).getUsername());
             assertEquals(password + i, allPatient.get(i).getPassword());
             assertEquals(mail + i, allPatient.get(i).getMail());
-            assertEquals(UserTypes.DOCTOR.getId(), allPatient.get(i).getType().getId());
+            assertEquals((Long)UserTypes.DOCTOR.getId(), allPatient.get(i).getType().getId());
         }
     }
 
@@ -230,7 +228,7 @@ public class UserServiceTest {
             assertEquals(username + i, allPatient.get(i).getUsername());
             assertEquals(password + i, allPatient.get(i).getPassword());
             assertEquals(mail + i, allPatient.get(i).getMail());
-            assertEquals(UserTypes.PATIENT.getId(), allPatient.get(i).getType().getId());
+            assertEquals((Long)UserTypes.PATIENT.getId(), allPatient.get(i).getType().getId());
         }
     }
 
@@ -245,7 +243,7 @@ public class UserServiceTest {
         assertEquals(username, dbDoctor.get().getUsername());
         assertEquals(password, dbDoctor.get().getPassword());
         assertEquals(mail, dbDoctor.get().getMail());
-        assertEquals(UserTypes.DOCTOR.getId(), dbDoctor.get().getType().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), dbDoctor.get().getType().getId());
     }
 
     @Test
@@ -259,7 +257,7 @@ public class UserServiceTest {
         assertEquals(username, dbPatient.get().getUsername());
         assertEquals(password, dbPatient.get().getPassword());
         assertEquals(mail, dbPatient.get().getMail());
-        assertEquals(UserTypes.PATIENT.getId(), dbPatient.get().getType().getId());
+        assertEquals((Long)UserTypes.PATIENT.getId(), dbPatient.get().getType().getId());
     }
 
     @Test
@@ -278,7 +276,7 @@ public class UserServiceTest {
         assertEquals(password, dbDoctor.get().getPassword());
         assertEquals(mail, dbDoctor.get().getMail());
         assertEquals(facilityId, dbDoctor.get().getFacility().getId());
-        assertEquals(UserTypes.DOCTOR.getId(), dbDoctor.get().getType().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), dbDoctor.get().getType().getId());
     }
 
 }

@@ -51,8 +51,6 @@ public class UserControllerTest extends AbstractControllerTest {
         calendarService.clearTable();
         facilityRepo.deleteAll();
         userService.clearUserTable();
-        userService.clearDoctorTable();
-        userService.clearPatientTable();
     }
 
     @After
@@ -61,8 +59,6 @@ public class UserControllerTest extends AbstractControllerTest {
         calendarService.clearTable();
         facilityRepo.deleteAll();
         userService.clearUserTable();
-        userService.clearDoctorTable();
-        userService.clearPatientTable();
     }
 
     @Test
@@ -85,7 +81,7 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(username, responseDoctor.getString("username"));
         assertEquals(password, responseDoctor.getString("password"));
         assertEquals(mail, responseDoctor.getString("mail"));
-        assertEquals(UserTypes.DOCTOR.getId(), (Long)((JSONObject)responseDoctor.get("type")).getLong("id"));
+        assertEquals((Long)UserTypes.DOCTOR.getId(), (Long)((JSONObject)responseDoctor.get("type")).getLong("id"));
     }
 
     @Test
@@ -119,7 +115,7 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(username, responsePatients.getString("username"));
         assertEquals(password, responsePatients.getString("password"));
         assertEquals(mail, responsePatients.getString("mail"));
-        assertEquals(UserTypes.PATIENT.getId(), (Long)((JSONObject)responsePatients.get("type")).getLong("id"));
+        assertEquals((Long)UserTypes.PATIENT.getId(), (Long)((JSONObject)responsePatients.get("type")).getLong("id"));
     }
 
     @Test
@@ -149,7 +145,7 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(username, retUser.get().getUsername());
         assertEquals(password, retUser.get().getPassword());
         assertEquals(mail, retUser.get().getMail());
-        assertEquals(UserTypes.DOCTOR.getId(), retUser.get().getType().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), retUser.get().getType().getId());
     }
 
     @Test
@@ -168,7 +164,7 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(username, retUser.get().getUsername());
         assertEquals(password, retUser.get().getPassword());
         assertEquals(mail, retUser.get().getMail());
-        assertEquals(UserTypes.PATIENT.getId(), retUser.get().getType().getId());
+        assertEquals((Long)UserTypes.PATIENT.getId(), retUser.get().getType().getId());
     }
 
     @Ignore
@@ -235,7 +231,7 @@ public class UserControllerTest extends AbstractControllerTest {
             assertEquals(username + i, ((JSONObject)responsePatients.get(i)).getString("username"));
             assertEquals(password + i, ((JSONObject)responsePatients.get(i)).getString("password"));
             assertEquals(mail + i, ((JSONObject)responsePatients.get(i)).getString("mail"));
-            assertEquals(UserTypes.PATIENT.getId(), (Long)((JSONObject)((JSONObject)responsePatients.get(i)).get("type")).getLong("id"));
+            assertEquals((Long)UserTypes.PATIENT.getId(), (Long)((JSONObject)((JSONObject)responsePatients.get(i)).get("type")).getLong("id"));
         }
     }
 
@@ -261,7 +257,7 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(password, dbDoctor.get().getPassword());
         assertEquals(mail, dbDoctor.get().getMail());
         assertEquals(facilityId, dbDoctor.get().getFacility().getId());
-        assertEquals(UserTypes.DOCTOR.getId(), dbDoctor.get().getType().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), dbDoctor.get().getType().getId());
     }
 
 }

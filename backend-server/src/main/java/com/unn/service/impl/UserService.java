@@ -12,7 +12,9 @@ import com.unn.model.Facility;
 import com.unn.model.Patient;
 import com.unn.model.User;
 import com.unn.model.UserType;
-import com.unn.repository.*;
+import com.unn.repository.FacilityRepo;
+import com.unn.repository.UserRepo;
+import com.unn.repository.UserTypeRepo;
 import com.unn.service.IUserService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +25,6 @@ public class UserService implements IUserService {
     private final UserTypeRepo userTypes;
     private final UserRepo userRepo;
     private final FacilityRepo facilityRepo;
-    private final DoctorRepo doctorRepo;
-    private final PatientRepo patientRepo;
 
     private final ValidationService validation;
     private final CalendarService calendarService;
@@ -109,16 +109,6 @@ public class UserService implements IUserService {
     @Override
     public void clearUserTable() {
         userRepo.deleteAll();
-    }
-
-    @Override
-    public void clearDoctorTable() {
-        doctorRepo.deleteAll();
-    }
-
-    @Override
-    public void clearPatientTable() {
-        patientRepo.deleteAll();
     }
 
     public Optional<Doctor> getDoctor(Long id) {

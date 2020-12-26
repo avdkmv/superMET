@@ -4,14 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum UserTypes {
-    ADMIN(1000L),
-    MODER(1001L),
-    DOCTOR(1002L),
-    PATIENT(1003L);
+    ADMIN(1000l),
+    MODER(1001l),
+    DOCTOR(1002l),
+    PATIENT(1003l);
 
-    private Long id;
+    private long id;
 
-    UserTypes(Long id) {
+    UserTypes(long id) {
         this.id = id;
     }
 }
