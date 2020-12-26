@@ -33,12 +33,12 @@ public class UserControllerTest extends AbstractControllerTest {
     @Before
     public void setUp() {
         super.setUp();
-        userService.clearTable();
+//        userService.clearTable();
     }
 
     @After
     public void tearDown() {
-        userService.clearTable();
+//        userService.clearTable();
     }
 
     @Test

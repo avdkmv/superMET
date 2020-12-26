@@ -52,6 +52,11 @@ public class CalendarService implements ICalendarService {
     }
 
     @Override
+    public Optional<Calendar> findCalendarByDoctorId(Long doctorId) {
+        return calendarRepo.findByDoctorId(doctorId);
+    }
+
+    @Override
     @Scheduled(cron = "0 0 0 * * 0")
     public void modifyCalendar() {
         LocalDate currentDate = LocalDate.now();
@@ -129,5 +134,10 @@ public class CalendarService implements ICalendarService {
                 }
             }
         }
+    }
+
+    @Override
+    public void clearTable() {
+        calendarRepo.deleteAll();
     }
 }

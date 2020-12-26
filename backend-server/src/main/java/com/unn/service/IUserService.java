@@ -17,7 +17,9 @@ public interface IUserService {
 
     Optional<User> updateUser(User user);
 
-    void clearTable();
+    void clearUserTable();
+    void clearDoctorTable();
+    void clearPatientTable();
 
     Optional<List<User>> getAllByType(UserTypes type);
 }
