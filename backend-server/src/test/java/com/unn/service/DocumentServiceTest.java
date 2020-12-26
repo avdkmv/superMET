@@ -27,22 +27,18 @@ public class DocumentServiceTest {
     private DocumentService documentService;
 
     @Test 
-    void createDocument() throws IOException {
-        documentService.clearTable();
-        
+    void createDocument() throws FileNotFoundException, IOException {        
         String number = "0";
         String description = "description";
         Long resourceId = 0L;
 
         File myFile = new File("123.txt");
-        myFile.createNewFile();
-        FileInputStream file = new FileInputStream(myFile);
-        MultipartFile multipartFile = new MockMultipartFile("123.txt", file);
+    	myFile.createNewFile();
+        MultipartFile multipartFile = new MockMultipartFile(myFile.getName(), new FileInputStream(myFile));
 
-        Document document = new Document(number, description); 
+        Document document = new Document(number, description);
         Optional<Document> createdDocument = documentService.createDocument(document, multipartFile);
 
-        
         Assert.assertEquals(createdDocument.get().getNumber(), number);
         Assert.assertEquals(createdDocument.get().getDescription(), description);
         Assert.assertEquals(createdDocument.get().getResource(), resourceId);
@@ -52,16 +48,13 @@ public class DocumentServiceTest {
 
     @Test
     void findDocumentById() throws IOException{
-        documentService.clearTable();
-        
         String number = "0";
         String description = "description";
         Long resourceId = 0L;
 
         File myFile = new File("123.txt");
-        myFile.createNewFile();
-        FileInputStream file = new FileInputStream(myFile);
-        MultipartFile multipartFile = new MockMultipartFile("123.txt", file);
+    	myFile.createNewFile();
+        MultipartFile multipartFile = new MockMultipartFile(myFile.getName(), new FileInputStream(myFile));
 
         Document document = new Document(number, description); 
         Optional<Document> createdDocument = documentService.createDocument(document, multipartFile);
@@ -76,16 +69,13 @@ public class DocumentServiceTest {
 
     @Test
     void findDocumentByResourceId() throws IOException {
-        documentService.clearTable();
-        
         String number = "0";
         String description = "description";
         Long resourceId = 0L;
 
         File myFile = new File("123.txt");
-        myFile.createNewFile();
-        FileInputStream file = new FileInputStream(myFile);
-        MultipartFile multipartFile = new MockMultipartFile("123.txt", file);
+    	myFile.createNewFile();
+        MultipartFile multipartFile = new MockMultipartFile(myFile.getName(), new FileInputStream(myFile));
 
         Document document = new Document(number, description); 
         Optional<Document> createdDocument = documentService.createDocument(document, multipartFile);
@@ -103,8 +93,6 @@ public class DocumentServiceTest {
 
     @Test
     void updateDocument() throws IOException {
-        documentService.clearTable();
-
         String number1 = "1";
         String description1 = "description1";
         Resource resource1 = new Resource();
@@ -112,9 +100,8 @@ public class DocumentServiceTest {
         resource1.setId(resourceId1);
 
         File myFile = new File("123.txt");
-        myFile.createNewFile();
-        FileInputStream file = new FileInputStream(myFile);
-        MultipartFile multipartFile = new MockMultipartFile("123.txt", file);
+    	myFile.createNewFile();
+        MultipartFile multipartFile = new MockMultipartFile(myFile.getName(), new FileInputStream(myFile));
 
         Document document = new Document(number1, description1); 
         Optional<Document> createdDocument = documentService.createDocument(document, multipartFile);
@@ -139,8 +126,6 @@ public class DocumentServiceTest {
 
     @Test
     void deleteDocument() throws IOException {
-        documentService.clearTable();
-
         String number1 = "1";
         String description1 = "description1";
         Resource resource1 = new Resource();
@@ -148,9 +133,8 @@ public class DocumentServiceTest {
         resource1.setId(resourceId1);
 
         File myFile = new File("123.txt");
-        myFile.createNewFile();
-        FileInputStream file = new FileInputStream(myFile);
-        MultipartFile multipartFile = new MockMultipartFile("123.txt", file);
+    	myFile.createNewFile();
+        MultipartFile multipartFile = new MockMultipartFile(myFile.getName(), new FileInputStream(myFile));
 
         Document document = new Document(number1, description1); 
         Optional<Document> createdDocument = documentService.createDocument(document, multipartFile);
@@ -160,5 +144,7 @@ public class DocumentServiceTest {
         Optional<Document> gotDocument = documentService.findDocument(createdDocument.get().getId());
 
         Assert.assertFalse(gotDocument.isPresent());
+
+        documentService.clearTable();
     }
 }

@@ -103,6 +103,6 @@ public class DocumentService implements IDocumentService {
 
     @Override
     public void clearTable() {
-        documentRepo.deleteAll();
+        // documentRepo.deleteAll();
     }
 }
