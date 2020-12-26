@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AppointmentService implements IAppointmentService {
-<<<<<<< HEAD
     // private final ValidationService validation;
 
     private final AppointmentRepo appointmentRepo;
@@ -169,60 +168,4 @@ public class AppointmentService implements IAppointmentService {
 
         return appointment;
     }
-=======
-  private final AppointmentRepo appointmentRepo;
-  private final DoctorRepo doctorRepo;
-  private final PatientRepo patientRepo;
-
-  @Override
-  public Optional<Appointment> createAppointment(Appointment appointment) {
-    appointmentRepo.save(appointment);
-    return Optional.of(appointment);
-  }
-
-  @Override
-  public Optional<Appointment> findAppointment(Long appointmentId) {
-    return appointmentRepo.findById(appointmentId);
-  }
-
-  @Override
-  public Optional<Appointment> findAppointment(Long doctorId, Long patientId) {
-    return appointmentRepo.findByDoctorIdAndPatientId(doctorId, patientId);
-  }
-
-  @Override
-  public Optional<Appointment> deleteAppointment(Long appointmentId) {
-    Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
-    if (appointment.isPresent())
-      appointmentRepo.deleteById(appointmentId);
-    return appointment;
-  }
-
-  @Override
-  public Optional<Appointment> deleteAppointment(
-    Long doctorId,
-    Long patientId
-  ) {
-    Optional<Appointment> appointment = appointmentRepo.findByDoctorIdAndPatientId(doctorId, patientId);
-    if (appointment.isPresent())
-      appointmentRepo.deleteByDoctorIdAndPatientId(doctorId, patientId);
-    return appointment;
-  }
-
-  @Override
-  public Optional<Appointment> newResult(Long appointmentId, Long documentId) {
-    // TODO:  implement method
-    return null;
-  }
-
-  @Override
-  public Optional<Appointment> newResult(
-    Long appointmentId,
-    Long doctorId,
-    Long patientId
-  ) {
-    // TODO:  implement method
-    return null;
-  }
->>>>>>> 3afc41a... Good one
 }
