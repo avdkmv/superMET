@@ -12,6 +12,7 @@ public interface Constant {
     public final int FACILITY_PARAM_SIZE = 127;
     public final int DOCUMENT_NUMBER_SIZE = 127;
     public final int DESCRIPTION_SIZE = 1023;
+    public final String METRIC_NOT_SPECIFIED = "not specified";
 
     /**
      * Path

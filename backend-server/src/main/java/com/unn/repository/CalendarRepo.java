@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CalendarRepo extends JpaRepository<Calendar, Long> {
-    public Optional<Calendar> findByDoctorId(Long doctorId);
+    Optional<Calendar> findByDoctorId(Long doctorId);
 }
