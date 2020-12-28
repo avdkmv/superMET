@@ -27,6 +27,10 @@ public class Resource {
     @JsonBackReference
     private Document document;
 
+    public Resource(String name) {
+        this.name = name;
+    }
+
     public Resource(String name, Document document) {
         this.name = name;
         this.document = document;

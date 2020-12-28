@@ -8,6 +8,8 @@ import com.unn.repository.ResourceRepo;
 import com.unn.service.IDocumentService;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +24,15 @@ public class DocumentService implements IDocumentService {
 
     @Override
     public Optional<Document> createDocument(Document document, MultipartFile file) {
+        Optional<Resource> resource = Optional.empty();
         try {
             if (file != null) {
-                String filename = addResource(file, document);
-                Optional<Resource> resource = resourceRepo.findByName(filename);
-                document.setResource(resource.get());
+                resource = addResource(file);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            document.setResource(resource.get());
             documentRepo.save(document);
         }
         return Optional.of(document);
@@ -52,8 +54,7 @@ public class DocumentService implements IDocumentService {
         updatedDocument.get().setDescription(document.getDescription());
         try {
             if (file != null) {
-                String filename = updateResource(file, updatedDocument.get());
-                Optional<Resource> resource = resourceRepo.findByName(filename);
+                Optional<Resource> resource = updateResource(file, updatedDocument.get());
                 updatedDocument.get().setResource(resource.get());
             }
         } catch (IOException e) {
@@ -68,36 +69,53 @@ public class DocumentService implements IDocumentService {
     public Optional<Document> deleteDocument(Long documentId) {
         Optional<Document> document = documentRepo.findById(documentId);
         if (document.isPresent()) {
-            documentRepo.delete(document.get());
-            File oldFile = new File(Constant.UPLOAD_PATH + "/" + document.get().getResource().getName());
+            String filePath = document.get().getResource().getName();
+            Long resourceId = document.get().getResource().getId();
+            File oldFile = new File(Constant.UPLOAD_PATH + "/" + filePath);
             oldFile.delete();
+            documentRepo.delete(document.get());
+            resourceRepo.deleteById(resourceId);
         }
         return document;
     }
 
-    private String addResource(MultipartFile file, Document document) throws IOException {
+    private Optional<Resource> addResource(MultipartFile file) throws IOException {
         String uuidFile = UUID.randomUUID().toString();
         String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-        file.transferTo(new File(Constant.UPLOAD_PATH + "/" + resultFilename));
+        File dir = Constant.UPLOAD_PATH.toFile();
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        String as = dir.getAbsolutePath();
+        file.transferTo(new File(Constant.UPLOAD_PATH + "\\" + resultFilename));
 
-        Resource resource = new Resource(file.getOriginalFilename(), document);
-        resourceRepo.save(resource);
-        return resource.getName();
+        Resource resource = new Resource(resultFilename);
+        return Optional.of(resourceRepo.save(resource));
     }
 
-    private String updateResource(MultipartFile file, Document document) throws IOException {
-        resourceRepo.deleteById(document.getResource().getId());
-        File oldFile = new File(Constant.UPLOAD_PATH + "/" + document.getResource().getName());
+    private Optional<Resource> updateResource(MultipartFile file, Document document) throws IOException {
+        File oldFile = new File(Constant.UPLOAD_PATH + "\\" + document.getResource().getName());
         oldFile.delete();
 
+        Optional<Document> dbDoc = documentRepo.findById(document.getId());
+        dbDoc.get().setResource(null);
+        documentRepo.save(dbDoc.get());
+
+        resourceRepo.deleteById(document.getResource().getId());
+
         String uuidFile = UUID.randomUUID().toString();
         String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-        file.transferTo(new File(Constant.UPLOAD_PATH + "/" + resultFilename));
+        file.transferTo(new File(Constant.UPLOAD_PATH + "\\" + resultFilename));
 
-        Resource resource = new Resource(file.getOriginalFilename(), document);
-        resourceRepo.save(resource);
-        return resource.getName();
+        Resource resource = new Resource(resultFilename, document);
+        return Optional.of(resourceRepo.save(resource));
     }
+
+    @Override
+    public Optional<List<Document>> findAll() {
+        return Optional.of(documentRepo.findAll());
+    }
+
 }
