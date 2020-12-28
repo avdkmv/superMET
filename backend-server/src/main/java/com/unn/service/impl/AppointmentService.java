@@ -5,10 +5,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import com.unn.model.Appointment;
 import com.unn.repository.AppointmentRepo;
 import com.unn.service.IAppointmentService;
+
 import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -167,5 +170,10 @@ public class AppointmentService implements IAppointmentService {
         );
 
         return appointment;
+    }
+
+    @Override
+    public void clearTable() {
+        appointmentRepo.deleteAll();
     }
 }

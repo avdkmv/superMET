@@ -1,19 +1,19 @@
 package com.unn.service.impl;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 import com.unn.model.Appointment;
 import com.unn.model.Calendar;
 import com.unn.model.Doctor;
 import com.unn.repository.AppointmentRepo;
 import com.unn.repository.CalendarRepo;
 import com.unn.service.ICalendarService;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -89,10 +89,6 @@ public class CalendarService implements ICalendarService {
 
         if (calendar.isPresent()) {
             calendarRepo.delete(calendar.get());
-            calendar
-                .get()
-                .getAppointments()
-                .forEach((appointmentId, appointment) -> appointmentRepo.deleteById(appointmentId));
         }
 
         return calendar;
@@ -126,8 +122,14 @@ public class CalendarService implements ICalendarService {
                         calendar
                     );
                     appointmentRepo.save(newAppointment);
+                    appointmentRepo.flush();
                 }
             }
         }
+    }
+
+    @Override
+    public void clearTable() {
+        calendarRepo.deleteAll();
     }
 }

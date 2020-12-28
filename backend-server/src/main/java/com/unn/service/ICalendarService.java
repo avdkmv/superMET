@@ -12,4 +12,6 @@ public interface ICalendarService {
     void modifyCalendar();
 
     Optional<Calendar> deleteCalendar(Long calendarId);
+
+    void clearTable();
 }
