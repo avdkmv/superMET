@@ -1,5 +1,14 @@
 package com.unn.service.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import com.unn.constants.Constant;
 import com.unn.constants.UserTypes;
 import com.unn.model.Appointment;
@@ -11,21 +20,14 @@ import com.unn.repository.CalendarRepo;
 import com.unn.repository.FacilityRepo;
 import com.unn.repository.UserRepo;
 import com.unn.service.IMetricsService;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -35,7 +37,6 @@ public class MetricsService implements IMetricsService {
     private final FacilityRepo facilityRepo;
     private final CalendarRepo calendarRepo;
     private final AppointmentRepo appointmentsRepo;
-    private final Logger logger = LogManager.getLogger(MetricsService.class);
 
     @Override
     public Optional<File> createStatistic() {
@@ -51,14 +52,14 @@ public class MetricsService implements IMetricsService {
         titleRow.createCell(3).setCellValue("Appointments count");
         titleRow.createCell(4).setCellValue("Efficiency in working days");
 
-        List<User> doctors = userRepo.findAllByTypeId(UserTypes.DOCTOR.getId()).get();
+        Optional<List<User>> doctors = userRepo.findAllByTypeId(UserTypes.DOCTOR.getId());
         if (doctors.isEmpty()) {
             return Optional.empty();
         }
 
-        for (int row = 1; row < doctors.size() + 1; row++) {
+        for (int row = 1; row < doctors.get().size() + 1; row++) {
             Row currentRow = sheet.createRow(row);
-            User currentDoctor = doctors.get(row - 1);
+            User currentDoctor = doctors.get().get(row - 1);
             Long currentDoctorId = currentDoctor.getId();
 
             //fill name
@@ -66,7 +67,7 @@ public class MetricsService implements IMetricsService {
 
             //fill facility
             Optional<Facility> facility = facilityRepo.findByDoctorsId(currentDoctorId);
-            if (facility.isPresent()) {
+            if (facility.isEmpty()) {
                 currentRow.createCell(1).setCellValue(Constant.METRIC_NOT_SPECIFIED);
             } else {
                 currentRow.createCell(1).setCellValue(facility.get().getName());
@@ -74,7 +75,7 @@ public class MetricsService implements IMetricsService {
 
             //fill work time
             Optional<Calendar> doctorCalendar = calendarRepo.findByDoctorId(currentDoctorId);
-            if (doctorCalendar.isPresent()) {
+            if (doctorCalendar.isEmpty()) {
                 currentRow.createCell(2).setCellValue(Constant.METRIC_NOT_SPECIFIED);
             } else {
                 currentRow
@@ -102,17 +103,16 @@ public class MetricsService implements IMetricsService {
                 //fill efficiency in working days
                 currentRow.createCell(4).setCellValue(0.00);
             }
-            
         }
 
         for (int col = 0; col < 5; col++) sheet.autoSizeColumn(col);
 
-        File file = new File("./statistic.xls");
+        File file = new File("./statistic_" + LocalDate.now() + ".xls");
         try {
             FileOutputStream outFile = new FileOutputStream(file);
             workbook.write(outFile);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return Optional.of(file);
     }
