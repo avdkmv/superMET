@@ -174,4 +174,9 @@ public class AppointmentService implements IAppointmentService {
         appointmentRepo.deleteAll();
     }
 
+    @Override
+    public Optional<List<Appointment>> findAll() {
+        return Optional.of(appointmentRepo.findAll());
+    }
+
 }
