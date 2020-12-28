@@ -122,7 +122,6 @@ public class CalendarService implements ICalendarService {
                         calendar
                     );
                     appointmentRepo.save(newAppointment);
-                    appointmentRepo.flush();
                 }
             }
         }
