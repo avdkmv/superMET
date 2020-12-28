@@ -88,14 +88,14 @@ public class DocumentService implements IDocumentService {
             dir.mkdir();
         }
         String as = dir.getAbsolutePath();
-        file.transferTo(new File(Constant.UPLOAD_PATH + "\\" + resultFilename));
+        file.transferTo(new File(Constant.UPLOAD_PATH + "/" + resultFilename));
 
         Resource resource = new Resource(resultFilename);
         return Optional.of(resourceRepo.save(resource));
     }
 
     private Optional<Resource> updateResource(MultipartFile file, Document document) throws IOException {
-        File oldFile = new File(Constant.UPLOAD_PATH + "\\" + document.getResource().getName());
+        File oldFile = new File(Constant.UPLOAD_PATH + "/" + document.getResource().getName());
         oldFile.delete();
 
         Optional<Document> dbDoc = documentRepo.findById(document.getId());
@@ -107,7 +107,7 @@ public class DocumentService implements IDocumentService {
         String uuidFile = UUID.randomUUID().toString();
         String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-        file.transferTo(new File(Constant.UPLOAD_PATH + "\\" + resultFilename));
+        file.transferTo(new File(Constant.UPLOAD_PATH + "/" + resultFilename));
 
         Resource resource = new Resource(resultFilename, document);
         return Optional.of(resourceRepo.save(resource));
