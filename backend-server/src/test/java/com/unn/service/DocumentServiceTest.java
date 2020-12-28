@@ -1,5 +1,6 @@
 package com.unn.service;
 
+import com.unn.constants.Constant;
 import com.unn.model.Document;
 import com.unn.repository.ResourceRepo;
 import com.unn.service.impl.DocumentService;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,10 @@ public class DocumentServiceTest {
     @Before
     @After
     public void clear() {
+        File dir = Constant.UPLOAD_PATH.toFile();
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
         Optional<List<Document>> retAllDocs = documentService.findAll();
         List<Document> allDocs = retAllDocs.get();
         for (int i = 0; i < allDocs.size(); i++) {
