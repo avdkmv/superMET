@@ -11,9 +11,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,6 +38,8 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "type_id")
+    @JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private UserType type;
 
     private String username;
@@ -42,7 +47,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private String mail;
+    private String email;
 
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
@@ -62,7 +67,7 @@ public class User implements UserDetails {
         this.type = type;
         this.username = username;
         this.password = password;
-        this.mail = mail;
+        this.email = mail;
     }
 
     public User addAuthority(SimpleGrantedAuthority authority) {
@@ -95,7 +100,7 @@ public class User implements UserDetails {
             ", isLoggedIn=" +
             isLoggedIn +
             ", mail=" +
-            mail +
+            email +
             ", password=" +
             password +
             ", type=" +

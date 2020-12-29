@@ -35,9 +35,6 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
-    @JsonProperty("doctor_id")
-    @JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
     private Doctor doctor;
 
     @ManyToOne

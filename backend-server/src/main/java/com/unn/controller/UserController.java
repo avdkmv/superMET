@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<SignupRequest> getCurretnUser(Authentication auth) {
+    public ResponseEntity<User> getCurretnUser(Authentication auth) {
         return responseService.handleGetResponse(userService.findUser(auth));
     }
 

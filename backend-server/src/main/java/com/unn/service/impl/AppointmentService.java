@@ -58,6 +58,26 @@ public class AppointmentService implements IAppointmentService {
         return appointment;
     }
 
+    public Optional<Appointment> terminate(Long id, Authentication auth) {
+        if (AuthUtils.notAuthenticated(auth)) {
+            return Optional.empty();
+        }
+
+        User user = (User) auth.getPrincipal();
+        Optional<Appointment> appointment = appointmentRepo.findById(id);
+        appointment.ifPresent(
+            a -> {
+                if (a.getPatient().getId() == user.getId() || a.getDoctor().getId() == user.getId()) {
+                    a.setBusy(false);
+                    a.setPatient(null);
+                    appointmentRepo.save(a);
+                }
+            }
+        );
+
+        return appointment;
+    }
+
     @Override
     public Optional<Appointment> updateAppointment(Appointment appointment) {
         appointmentRepo.save(appointment);

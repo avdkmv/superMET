@@ -33,7 +33,7 @@ public class ValidationService implements IValidationService {
         if (type.isPresent()) {
             return (
                 isStringParamsValid(Constant.USER_PARAMS_SIZE, req.getUsername(), req.getPassword(), req.getEmail()) &&
-                userRepo.findByMail(req.getEmail()).isEmpty() &&
+                userRepo.findByEmail(req.getEmail()).isEmpty() &&
                 userRepo.findByUsername(req.getUsername()).isEmpty()
             );
         } else {
@@ -46,7 +46,7 @@ public class ValidationService implements IValidationService {
         if (user != null) {
             return (
                 isStringParamsValid(Constant.USER_PARAMS_SIZE, user.getUsername(), user.getPassword()) &&
-                userRepo.findByMail(user.getMail()).isPresent()
+                userRepo.findByEmail(user.getEmail()).isPresent()
             );
         } else {
             return false;
