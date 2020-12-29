@@ -74,7 +74,7 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> findUser(String mail) {
-        return userRepo.findByMail(mail);
+        return userRepo.findByEmail(mail);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class UserService implements IUserService {
         return userRepo.findById(id);
     }
 
-    public Optional<SignupRequest> findUser(Authentication auth) {
+    public Optional<User> findUser(Authentication auth) {
         if (AuthUtils.notAuthenticated(auth)) {
             return Optional.empty();
         }
@@ -91,17 +91,9 @@ public class UserService implements IUserService {
 
         if (user.isPresent()) {
             user.get().addAuthority(user.get().createAuthority());
-
-            SignupRequest res = new SignupRequest(
-                user.get().getType().getId(),
-                user.get().getUsername(),
-                user.get().getPassword(),
-                user.get().getMail()
-            );
-            return Optional.of(res);
         }
 
-        return Optional.empty();
+        return user;
     }
 
     public Optional<User> findByUsername(String username) {
@@ -110,7 +102,7 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> deleteUser(String mail) {
-        Optional<User> user = userRepo.findByMail(mail);
+        Optional<User> user = userRepo.findByEmail(mail);
         if (user.isPresent()) {
             userRepo.deleteById(user.get().getId());
         }
@@ -237,7 +229,7 @@ public class UserService implements IUserService {
     private void updateUserParams(User user, UserType type, SignupRequest request) {
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
-        user.setMail(request.getEmail());
+        user.setEmail(request.getEmail());
         user.setType(type);
     }
 }

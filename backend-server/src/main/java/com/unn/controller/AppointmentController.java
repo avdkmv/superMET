@@ -47,6 +47,11 @@ public class AppointmentController {
         return responseService.handleDeleteResponse(appointmentService.deleteAppointment(id));
     }
 
+    @DeleteMapping("/{id}/terminate")
+    public ResponseEntity<Appointment> terminateAppointment(@PathVariable(name = "id") Long id, Authentication auth) {
+        return responseService.handleDeleteResponse(appointmentService.terminate(id, auth));
+    }
+
     @DeleteMapping("/doctor/{doctorId}/patient/{patientId}/delete")
     public ResponseEntity<Appointment> deleteAppointment(
         @PathVariable(name = "doctorId") Long doctorId,
@@ -54,14 +59,6 @@ public class AppointmentController {
     ) {
         return responseService.handleDeleteResponse(appointmentService.deleteAppointment(doctorId, patientId));
     }
-
-    // @PostMapping("/create/doctor/{doctorId}/date/{date}")
-    // public ResponseEntity<Appointment> createAppointment(
-    //     @PathVariable(name = "doctorId") Long doctorId,
-    //     @PathVariable(name = "date") Date date
-    // ) {
-    //     return responseService.handlePostResponse(appointmentService.createAppointment(doctorId, date));
-    // }
 
     @GetMapping("/doctor/{id}/free")
     public ResponseEntity<List<Appointment>> getDoctorFreeAppointments(@PathVariable(name = "id") Long id) {

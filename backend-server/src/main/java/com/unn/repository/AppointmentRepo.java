@@ -1,6 +1,5 @@
 package com.unn.repository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import com.unn.model.Appointment;
