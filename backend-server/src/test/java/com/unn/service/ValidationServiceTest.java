@@ -19,6 +19,7 @@ import com.unn.repository.DoctorRepo;
 import com.unn.repository.PatientRepo;
 import com.unn.repository.UserTypeRepo;
 import com.unn.service.impl.AppointmentService;
+import com.unn.service.impl.CalendarService;
 import com.unn.service.impl.ChatService;
 import com.unn.service.impl.DocumentService;
 import com.unn.service.impl.UserService;
@@ -54,6 +55,9 @@ public class ValidationServiceTest {
     private AppointmentService appointmentService;
 
     @Autowired
+    private CalendarService calendarService;
+
+    @Autowired
     private UserTypeRepo userTypeRepo;
 
     @Autowired
@@ -85,10 +89,11 @@ public class ValidationServiceTest {
     @Before
     @After
     public void clear() {
-        userService.clearTable();
         documentService.clearTable();
         appointmentService.clearTable();
         chatService.clearTable();
+        calendarService.clearTable();
+        userService.clearTable();
     }
 
     @Test
@@ -124,7 +129,9 @@ public class ValidationServiceTest {
 
     @Test
     public void unvalidDocumentCreationTest() {
-        assertFalse(validationService.validateDocumentCreate(new Document()));
+        Document document = VALID_DOCUMENT;
+        document.setNumber(OUT_OF_RANGE_USERNAME);
+        assertFalse(validationService.validateDocumentCreate(document));
     }
 
     @Test
