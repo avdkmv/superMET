@@ -1,10 +1,13 @@
 package com.unn.controller;
 
 import java.util.List;
+import java.util.Map;
+import com.unn.dto.DayResponse;
 import com.unn.model.Appointment;
 import com.unn.service.impl.AppointmentService;
 import com.unn.service.impl.ResponseService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +25,8 @@ public class AppointmentController {
     private final ResponseService responseService;
 
     @PostMapping("/create/{id}")
-    public ResponseEntity<Appointment> makeAppointment(@PathVariable(name = "id") Long id) {
-        return responseService.handleGetResponse(appointmentService.makeAppointment(id));
+    public ResponseEntity<Appointment> makeAppointment(@PathVariable(name = "id") Long id, Authentication auth) {
+        return responseService.handlePostResponse(appointmentService.makeAppointment(id, auth));
     }
 
     @GetMapping("/{id}")
@@ -70,6 +73,11 @@ public class AppointmentController {
         return responseService.handleGetResponse(appointmentService.findBusyAppointmentsByDoctor(id));
     }
 
+    @GetMapping("/doctor/{id}/days")
+    public ResponseEntity<Map<Integer, List<DayResponse>>> getDoctorFreeDays(@PathVariable(name = "id") Long id) {
+        return responseService.handleGetResponse(appointmentService.findFreeDaysByDoctor(id));
+    }
+
     @GetMapping("/doctor/{id}/free/{day}")
     public ResponseEntity<List<Appointment>> getFreeAppointmentByDay(
         @PathVariable(name = "day") Long day,
@@ -86,13 +94,13 @@ public class AppointmentController {
         return responseService.handleGetResponse(appointmentService.countFreeAppointmetnsPerDay(day, doctorId));
     }
 
-    @GetMapping("/patient/{id}/free")
-    public ResponseEntity<List<Appointment>> getPatientFreeAppointment(@PathVariable(name = "id") Long id) {
-        return responseService.handleGetResponse(appointmentService.findFreeAppointmentsByPatient(id));
+    @GetMapping("/patient/free")
+    public ResponseEntity<List<Appointment>> getPatientFreeAppointment(Authentication auth) {
+        return responseService.handleGetResponse(appointmentService.findFreeAppointmentsByPatient(auth));
     }
 
-    @GetMapping("/patient/{id}/busy")
-    public ResponseEntity<List<Appointment>> getPatientBusyAppointment(@PathVariable(name = "id") Long id) {
-        return responseService.handleGetResponse(appointmentService.findBusyAppointmentsByPatient(id));
+    @GetMapping("/patient/busy")
+    public ResponseEntity<List<Appointment>> getPatientBusyAppointment(Authentication auth) {
+        return responseService.handleGetResponse(appointmentService.findBusyAppointmentsByPatient(auth));
     }
 }

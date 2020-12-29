@@ -16,7 +16,6 @@ import com.unn.repository.PatientRepo;
 import com.unn.repository.UserRepo;
 import com.unn.service.IValidationService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -113,7 +112,7 @@ public class ValidationService implements IValidationService {
 
     private boolean isStringParamsValid(int allowedSize, String... params) {
         for (String param : params) {
-            if (StringUtils.isEmpty(param) || param.length() > allowedSize) {
+            if (param.isEmpty() || param.length() > allowedSize) {
                 return false;
             }
         }

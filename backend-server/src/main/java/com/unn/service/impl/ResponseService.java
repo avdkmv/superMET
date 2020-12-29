@@ -13,24 +13,28 @@ public class ResponseService implements IResponseService {
 
     @Override
     public <T> ResponseEntity<T> handleGetResponse(Optional<T> body) {
-        if (body.isPresent()) {
-            return ResponseEntity.ok(body.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return handleResponse(body, HttpStatus.OK, HttpStatus.NOT_FOUND);
     }
 
     @Override
     public <T> ResponseEntity<T> handlePostResponse(Optional<T> body) {
-        if (body.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(body.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        return handleResponse(body, HttpStatus.CREATED, HttpStatus.BAD_REQUEST);
     }
 
     @Override
     public <T> ResponseEntity<T> handleDeleteResponse(Optional<T> body) {
         return handleGetResponse(body);
+    }
+
+    public ResponseEntity<String> handleLoginResponse(Optional<String> body) {
+        return handleResponse(body, HttpStatus.OK, HttpStatus.UNAUTHORIZED);
+    }
+
+    private <T> ResponseEntity<T> handleResponse(Optional<T> body, HttpStatus ok, HttpStatus err) {
+        if (body.isPresent()) {
+            return ResponseEntity.status(ok).body(body.get());
+        } else {
+            return ResponseEntity.status(err).build();
+        }
     }
 }

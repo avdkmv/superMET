@@ -16,6 +16,9 @@ import com.unn.repository.FacilityRepo;
 import com.unn.repository.UserRepo;
 import com.unn.repository.UserTypeRepo;
 import com.unn.service.IUserService;
+import com.unn.util.AuthUtils;
+import org.springframework.core.convert.ConversionException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -31,22 +34,28 @@ public class UserService implements IUserService {
 
     @PostConstruct
     private void createUserTypes() {
-        Arrays.stream(UserTypes.values()).forEach(
-            type -> {
-                if (!userTypes.existsById(type.getId())) {
-                    UserType newType = new UserType();
-                    newType.setId(type.getId());
-                    newType.setName(type.toString());
+        Arrays
+            .stream(UserTypes.values())
+            .forEach(
+                type -> {
+                    if (!userTypes.existsById(type.getId())) {
+                        UserType newType = new UserType();
+                        newType.setId(type.getId());
+                        newType.setName(type.toString());
 
-                    userTypes.saveAndFlush(newType);
+                        userTypes.saveAndFlush(newType);
+                    }
                 }
-            }
-        );
+            );
+    }
+
+    public Optional<UserType> findUserTypeById(Long id) {
+        return userTypes.findById(id);
     }
 
     @Override
     public Optional<User> createUser(SignupRequest request) {
-        Optional<UserType> userType = userTypes.findById(request.getTypeId());
+        Optional<UserType> userType = findUserTypeById(request.getTypeId());
 
         if (!validation.validateUserCreation(userType, request)) {
             return Optional.empty();
@@ -73,6 +82,32 @@ public class UserService implements IUserService {
         return userRepo.findById(id);
     }
 
+    public Optional<SignupRequest> findUser(Authentication auth) {
+        if (AuthUtils.notAuthenticated(auth)) {
+            return Optional.empty();
+        }
+
+        Optional<User> user = findByUsername(auth.getName());
+
+        if (user.isPresent()) {
+            user.get().addAuthority(user.get().createAuthority());
+
+            SignupRequest res = new SignupRequest(
+                user.get().getType().getId(),
+                user.get().getUsername(),
+                user.get().getPassword(),
+                user.get().getMail()
+            );
+            return Optional.of(res);
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
+
     @Override
     public Optional<User> deleteUser(String mail) {
         Optional<User> user = userRepo.findByMail(mail);
@@ -92,13 +127,23 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> updateUser(User user) {
-        Optional<User> updatedUser = userRepo.findByMail(user.getMail());
-        updatedUser.get().setUsername(user.getUsername());
-        updatedUser.get().setPassword(user.getPassword());
+    public Optional<User> updateUser(User updatedUser) {
+        Optional<User> existingUser = userRepo.findById(updatedUser.getId());
 
-        userRepo.save(updatedUser.get());
-        return updatedUser;
+        existingUser.ifPresent(
+            user -> {
+                user.setAuthorities(updatedUser.getAuthorities());
+                user.setEnabled(updatedUser.isEnabled());
+                user.setAccountNonExpired(updatedUser.isAccountNonExpired());
+                user.setAccountNonLocked(updatedUser.isAccountNonLocked());
+                user.setCredentialsNonExpired(updatedUser.isCredentialsNonExpired());
+                user.setLoggedIn(updatedUser.isLoggedIn());
+
+                user = userRepo.save(user);
+            }
+        );
+
+        return existingUser;
     }
 
     @Override
@@ -119,19 +164,44 @@ public class UserService implements IUserService {
         return getUserByType(id, Patient.class);
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends User> Optional<T> getUserByType(Long id, Class<T> type) {
-        Optional<User> user = findUser(id);
+    public Optional<Doctor> getDoctor(String username) {
+        return getUserByUsernameAndType(username, Doctor.class);
+    }
 
-        if (user.isPresent()) {
-            return Optional.of((T) user.get());
+    public Optional<Patient> getPatient(String username) {
+        return getUserByUsernameAndType(username, Patient.class);
+    }
+
+    private <T extends User> Optional<T> getUserByType(Long id, Class<T> type) {
+        try {
+            Optional<T> user = userRepo.findById(id, type);
+
+            if (user.isPresent()) {
+                return user;
+            }
+        } catch (ConversionException ex) {
+            return Optional.empty();
+        }
+
+        return Optional.empty();
+    }
+
+    private <T extends User> Optional<T> getUserByUsernameAndType(String username, Class<T> type) {
+        try {
+            Optional<T> user = userRepo.findByUsername(username, type);
+
+            if (user.isPresent()) {
+                return user;
+            }
+        } catch (ConversionException ex) {
+            return Optional.empty();
         }
 
         return Optional.empty();
     }
 
     public Optional<Doctor> attachDoctorToFacility(Long doctorId, Long facilityId) {
-        Optional<Doctor> doctor = getUserByType(doctorId, Doctor.class);
+        Optional<Doctor> doctor = getDoctor(doctorId);
         Optional<Facility> facility = facilityRepo.findById(facilityId);
 
         if (!doctor.isPresent() || !facility.isPresent()) {
@@ -147,7 +217,6 @@ public class UserService implements IUserService {
     private Optional<User> saveDoctor(User user, SignupRequest request, UserType type) {
         user = new Doctor();
         updateUserParams(user, type, request);
-        ((Doctor) user).setUser(user);
 
         User savedUser = userRepo.save(user);
         Optional<Calendar> calendar = calendarService.createCalendarByDoctorId((Doctor) savedUser, 10, 18);
@@ -161,7 +230,6 @@ public class UserService implements IUserService {
     private Optional<User> savePatient(User user, SignupRequest request, UserType type) {
         user = new Patient();
         updateUserParams(user, type, request);
-        ((Patient) user).setUser(user);
 
         return Optional.of(userRepo.save(user));
     }

@@ -8,6 +8,7 @@ import com.unn.model.Facility;
 import com.unn.repository.FacilityRepo;
 import com.unn.service.IFacilityService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -36,6 +37,7 @@ public class FacilityService implements IFacilityService {
         return facilityRepo.findById(id);
     }
 
+    @Transactional
     public Optional<List<Doctor>> findDoctorsInFacility(Long facilityId) {
         Optional<Facility> facility = findFacilityById(facilityId);
         List<Doctor> doctors = new ArrayList<>();

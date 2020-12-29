@@ -13,6 +13,7 @@ import com.unn.service.impl.UserService;
 import com.unn.service.impl.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,12 +33,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-        Optional<User> user = userService.findUser(id);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return responseService.handleGetResponse(userService.findUser(id));
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<SignupRequest> getCurretnUser(Authentication auth) {
+        return responseService.handleGetResponse(userService.findUser(auth));
     }
 
     @GetMapping("/doctor/{id}")
@@ -66,11 +67,6 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody SignupRequest request) {
-        return responseService.handlePostResponse(userService.createUser(request));
     }
 
     @PostMapping("/edit")
