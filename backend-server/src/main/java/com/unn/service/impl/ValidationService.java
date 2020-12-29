@@ -16,7 +16,6 @@ import com.unn.repository.PatientRepo;
 import com.unn.repository.UserRepo;
 import com.unn.service.IValidationService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,7 +33,7 @@ public class ValidationService implements IValidationService {
         if (type.isPresent()) {
             return (
                 isStringParamsValid(Constant.USER_PARAMS_SIZE, req.getUsername(), req.getPassword(), req.getEmail()) &&
-                userRepo.findByMail(req.getEmail()).isEmpty() &&
+                userRepo.findByEmail(req.getEmail()).isEmpty() &&
                 userRepo.findByUsername(req.getUsername()).isEmpty()
             );
         } else {
@@ -47,7 +46,7 @@ public class ValidationService implements IValidationService {
         if (user != null) {
             return (
                 isStringParamsValid(Constant.USER_PARAMS_SIZE, user.getUsername(), user.getPassword()) &&
-                userRepo.findByMail(user.getMail()).isPresent()
+                userRepo.findByEmail(user.getEmail()).isPresent()
             );
         } else {
             return false;
@@ -113,7 +112,7 @@ public class ValidationService implements IValidationService {
 
     private boolean isStringParamsValid(int allowedSize, String... params) {
         for (String param : params) {
-            if (StringUtils.isEmpty(param) || param.length() > allowedSize) {
+            if (param.isEmpty() || param.length() > allowedSize) {
                 return false;
             }
         }

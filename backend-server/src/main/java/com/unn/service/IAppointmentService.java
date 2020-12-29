@@ -3,6 +3,7 @@ package com.unn.service;
 import java.util.List;
 import java.util.Optional;
 import com.unn.model.Appointment;
+import org.springframework.security.core.Authentication;
 
 public interface IAppointmentService {
     // Optional<Appointment> createAppointment(Long doctorId, Date date);
@@ -13,8 +14,8 @@ public interface IAppointmentService {
     Optional<List<Appointment>> findBusyAppointmentsByDoctor(Long doctorId);
     Optional<List<Appointment>> findFreeAppointmentsByDoctor(Long doctorId);
 
-    Optional<List<Appointment>> findBusyAppointmentsByPatient(Long patientId);
-    Optional<List<Appointment>> findFreeAppointmentsByPatient(Long patientId);
+    Optional<List<Appointment>> findBusyAppointmentsByPatient(Authentication auth);
+    Optional<List<Appointment>> findFreeAppointmentsByPatient(Authentication auth);
 
     Optional<List<Appointment>> findFreeAppointmentsByDay(Long day, Long doctorId);
     Optional<String> countFreeAppointmetnsPerDay(Long day, Long doctorId);

@@ -1,7 +1,6 @@
 package com.unn.service.impl;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import com.unn.model.Appointment;
@@ -36,8 +35,8 @@ public class CalendarService implements ICalendarService {
         calendar.setEndTime(endTime);
         calendar.setDoctor(doctor);
 
-        LocalDate currentDate = LocalDate.now();
-        LocalDate endDate = currentDate.plusDays(14); // schedule for two weeks
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime endDate = currentDate.plusDays(14); // schedule for two weeks
 
         Calendar savedCalendar = calendarRepo.save(calendar);
         doctor.setCalendar(savedCalendar);
@@ -59,17 +58,16 @@ public class CalendarService implements ICalendarService {
     @Override
     @Scheduled(cron = "0 0 0 * * 0")
     public void modifyCalendar() {
-        LocalDate currentDate = LocalDate.now();
+        LocalDateTime currentDate = LocalDateTime.now();
         List<Calendar> allCalendars = calendarRepo.findAll();
         allCalendars.forEach(
             calendar -> {
                 // deleting last week
-                Date newStartDate = java.sql.Date.valueOf(currentDate);
                 calendar
                     .getAppointments()
                     .forEach(
                         (appointmentId, appointment) -> {
-                            if (appointment.getDate().before(newStartDate)) {
+                            if (appointment.getDate().isBefore(currentDate)) {
                                 appointmentRepo.deleteById(appointmentId);
                                 calendar.getAppointments().remove(appointmentId);
                             }
@@ -94,42 +92,27 @@ public class CalendarService implements ICalendarService {
 
         if (calendar.isPresent()) {
             calendarRepo.delete(calendar.get());
-            calendar
-                .get()
-                .getAppointments()
-                .forEach((appointmentId, appointment) -> appointmentRepo.deleteById(appointmentId));
         }
 
         return calendar;
     }
 
     private void createAppointments(
-        LocalDate currentDate,
-        LocalDate endDate,
+        LocalDateTime currentDate,
+        LocalDateTime endDate,
         int startTime,
         int endTime,
         Calendar calendar
     ) {
-        java.util.Calendar appointmentCalendar = java.util.Calendar.getInstance();
-
-        for (LocalDate startDate = currentDate; startDate.isBefore(endDate); startDate = startDate.plusDays(1)) {
+        for (LocalDateTime startDate = currentDate; startDate.isBefore(endDate); startDate = startDate.plusDays(1)) {
             if (startDate.getDayOfWeek().getValue() != 6 && startDate.getDayOfWeek().getValue() != 7) {
-                Date appointmentDate = java.sql.Date.valueOf(startDate);
-                appointmentCalendar.setTime(appointmentDate);
-
+                LocalDateTime endDateTime = startDate.withHour(endTime).withMinute(0).withSecond(0);
                 for (
-                    appointmentCalendar.set(java.util.Calendar.HOUR_OF_DAY, startTime);
-                    appointmentCalendar.get(java.util.Calendar.HOUR_OF_DAY) <= endTime;
-                    appointmentCalendar.add(java.util.Calendar.HOUR_OF_DAY, 1), appointmentCalendar.add(
-                        java.util.Calendar.MINUTE,
-                        5
-                    )
+                    LocalDateTime dateTime = startDate.withHour(startTime).withMinute(0).withSecond(0);
+                    dateTime.isBefore(endDateTime);
+                    dateTime = dateTime.plusHours(1).plusMinutes(5)
                 ) {
-                    Appointment newAppointment = new Appointment(
-                        calendar.getDoctor(),
-                        appointmentCalendar.getTime(),
-                        calendar
-                    );
+                    Appointment newAppointment = new Appointment(calendar.getDoctor(), dateTime, calendar);
                     appointmentRepo.save(newAppointment);
                 }
             }

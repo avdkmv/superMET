@@ -18,4 +18,9 @@ public interface Constant {
      */
 
     public final Path UPLOAD_PATH = Paths.get("/files");
+
+    /**
+     * Email message
+     */
+    public final String NOTIFICATION = "Do not forget about your appointment with %s at %s";
 }

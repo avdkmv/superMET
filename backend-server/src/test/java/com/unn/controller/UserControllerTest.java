@@ -67,6 +67,7 @@ public class UserControllerTest extends AbstractControllerTest {
         Optional<User> createdUser = userService.createUser(signupRequest);
         Long id = createdUser.get().getId();
 
+
         String url = "/user/doctor/" + id;
         MvcResult mvcResult = mvc
             .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
@@ -76,6 +77,7 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(statusOK, status);
 
         String jsonObj = mvcResult.getResponse().getContentAsString();
+
         JSONObject responseDoctor = new JSONObject(jsonObj);
 
         assertEquals(username, responseDoctor.getString("username"));
@@ -110,6 +112,7 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(statusOK, status);
 
         String jsonObj = mvcResult.getResponse().getContentAsString();
+
         JSONObject responsePatients = new JSONObject(jsonObj);
 
         assertEquals(username, responsePatients.getString("username"));
@@ -196,6 +199,7 @@ public class UserControllerTest extends AbstractControllerTest {
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
 
+
         Optional<User> dbUser = userService.findUser(id);
         assertTrue(dbUser.isEmpty());
     }
@@ -223,6 +227,7 @@ public class UserControllerTest extends AbstractControllerTest {
                 .andReturn();
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
+
 
         String jsonObj = mvcResult.getResponse().getContentAsString();
         JSONArray responsePatients = new JSONArray(jsonObj);
