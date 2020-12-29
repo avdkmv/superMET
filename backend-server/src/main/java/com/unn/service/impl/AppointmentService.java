@@ -168,4 +168,9 @@ public class AppointmentService implements IAppointmentService {
 
         return appointment;
     }
+
+	@Override
+	public void clearTable() {
+		appointmentRepo.deleteAll();
+	}
 }
