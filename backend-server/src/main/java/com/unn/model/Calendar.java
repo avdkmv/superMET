@@ -33,6 +33,7 @@ public class Calendar {
 
     @OneToOne
     @JoinColumn(name = "doctor_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Doctor doctor;
 
