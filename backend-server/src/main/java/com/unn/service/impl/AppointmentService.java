@@ -263,4 +263,9 @@ public class AppointmentService implements IAppointmentService {
     public void clearTable() {
         appointmentRepo.deleteAll();
     }
+
+	@Override
+	public void clearTable() {
+		appointmentRepo.deleteAll();
+	}
 }

@@ -13,4 +13,6 @@ public interface IDocumentService {
     Optional<Document> updateDocument(Document document, MultipartFile files);
 
     Optional<Document> deleteDocument(Long documentId);
+
+    void clearTable();
 }

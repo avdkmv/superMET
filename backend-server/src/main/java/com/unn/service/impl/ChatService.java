@@ -1,13 +1,16 @@
 package com.unn.service.impl;
 
+import java.util.HashMap;
+import java.util.Optional;
+
 import com.unn.model.Chat;
 import com.unn.model.Message;
 import com.unn.repository.ChatRepo;
 import com.unn.service.IChatService;
-import java.util.HashMap;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +51,10 @@ public class ChatService implements IChatService {
             chatRepo.save(chat.get());
         }
         return chat;
+    }
+
+    @Override
+    public void clearTable() {
+        chatRepo.deleteAll();
     }
 }
