@@ -8,6 +8,7 @@ public interface ICalendarService {
     Optional<Calendar> createCalendarByDoctorId(Doctor dcotor, int startTime, int endTime);
 
     Optional<Calendar> findCalendar(Long calendarId);
+    Optional<Calendar> findCalendarByDoctorId(Long doctorId);
 
     void modifyCalendar();
 

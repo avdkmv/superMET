@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 public abstract class AbstractControllerTest {
     protected final int statusOK = 200;
+    protected final int statusCREATED = 201;
     protected final int statusBAD_REQUEST = 400;
     protected final int statusNOT_FOUND = 404;
 
