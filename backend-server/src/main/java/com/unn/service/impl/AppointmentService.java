@@ -238,7 +238,7 @@ public class AppointmentService implements IAppointmentService {
 
                         if (appointment.get().getPatient() != null) {
                             NotificationEmail email = new NotificationEmail(
-                                appointment.get().getPatient().getMail(),
+                                appointment.get().getPatient().getEmail(),
                                 "Appointment notification",
                                 appointment.get().getDoctor().getUsername(),
                                 appointment.get().getDate()
