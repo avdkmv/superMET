@@ -39,9 +39,7 @@ public class CalendarServiceTest {
     @Autowired
     DoctorRepo doctorRepo;
 
-    private final String username = "username";
-    private final String password = "password";
-    private final String mail = "mail";
+    private final SignupRequest REQUEST = new SignupRequest(UserTypes.DOCTOR.getId(), "username", "password", "mail");
 
     @Before
     @After
@@ -53,7 +51,7 @@ public class CalendarServiceTest {
 
     @Test
     public void createCalendarByDoctorIdTest() {
-        User user = userService.createUser(new SignupRequest(UserTypes.DOCTOR.getId(), username, password, mail)).get();
+        User user = userService.createUser(REQUEST).get();
         Doctor doctor = doctorRepo.findById(user.getId()).get();
         Optional<Calendar> calendarFromRepo = calendarService.findCalendar(doctor.getCalendar().getId());
 
@@ -62,7 +60,7 @@ public class CalendarServiceTest {
 
     @Test
     public void findCalendarTest() {
-        User user = userService.createUser(new SignupRequest(UserTypes.DOCTOR.getId(), username, password, mail)).get();
+        User user = userService.createUser(REQUEST).get();
         Doctor doctor = doctorRepo.findById(user.getId()).get();
         Optional<Calendar> calendarFromRepo = calendarService.findCalendar(doctor.getCalendar().getId());
 
@@ -71,7 +69,7 @@ public class CalendarServiceTest {
 
     @Test
     public void deleteCalendarTest() {
-        User user = userService.createUser(new SignupRequest(UserTypes.DOCTOR.getId(), username, password, mail)).get();
+        User user = userService.createUser(REQUEST).get();
         Doctor doctor = doctorRepo.findById(user.getId()).get();
         calendarService.deleteCalendar(doctor.getCalendar().getId());
 
