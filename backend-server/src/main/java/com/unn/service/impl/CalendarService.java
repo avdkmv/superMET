@@ -87,10 +87,6 @@ public class CalendarService implements ICalendarService {
 
         if (calendar.isPresent()) {
             calendarRepo.delete(calendar.get());
-            calendar
-                .get()
-                .getAppointments()
-                .forEach((appointmentId, appointment) -> appointmentRepo.deleteById(appointmentId));
         }
 
         return calendar;
@@ -116,5 +112,10 @@ public class CalendarService implements ICalendarService {
                 }
             }
         }
+    }
+
+    @Override
+    public void clearTable() {
+        calendarRepo.deleteAll();
     }
 }

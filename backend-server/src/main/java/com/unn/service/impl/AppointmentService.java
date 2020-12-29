@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+
 import com.unn.dto.DayResponse;
 import com.unn.model.Appointment;
 import com.unn.model.NotificationEmail;
@@ -16,12 +17,14 @@ import com.unn.model.Patient;
 import com.unn.model.User;
 import com.unn.repository.AppointmentRepo;
 import com.unn.service.IAppointmentService;
+
 import com.unn.util.AuthUtils;
 import com.unn.util.RunnableSendEmail;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.core.Authentication;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -254,5 +257,10 @@ public class AppointmentService implements IAppointmentService {
         );
 
         return user.isPresent() ? appointment : Optional.empty();
+    }
+
+    @Override
+    public void clearTable() {
+        appointmentRepo.deleteAll();
     }
 }

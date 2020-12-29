@@ -38,6 +38,7 @@ public class Calendar {
     private Doctor doctor;
 
     @OneToMany(mappedBy = "calendar")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private Map<Long, Appointment> appointments;
 
