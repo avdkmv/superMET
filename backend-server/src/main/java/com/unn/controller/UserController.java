@@ -2,15 +2,17 @@ package com.unn.controller;
 
 import java.util.List;
 import java.util.Optional;
+
 import javax.validation.Valid;
+
 import com.unn.constants.UserTypes;
-import com.unn.dto.SignupRequest;
 import com.unn.model.Doctor;
 import com.unn.model.Patient;
 import com.unn.model.User;
 import com.unn.service.impl.ResponseService;
 import com.unn.service.impl.UserService;
 import com.unn.service.impl.ValidationService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -101,9 +104,9 @@ public class UserController {
 
     @GetMapping("/patients")
     public ResponseEntity<List<User>> getAllPatients() {
-        Optional<List<User>> doctors = userService.getAllByType(UserTypes.PATIENT);
-        if (doctors.isPresent()) {
-            return ResponseEntity.ok(doctors.get());
+        Optional<List<User>> patients = userService.getAllByType(UserTypes.PATIENT);
+        if (patients.isPresent()) {
+            return ResponseEntity.ok(patients.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

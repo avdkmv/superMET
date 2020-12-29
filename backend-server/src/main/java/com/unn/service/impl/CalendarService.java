@@ -51,6 +51,11 @@ public class CalendarService implements ICalendarService {
     }
 
     @Override
+    public Optional<Calendar> findCalendarByDoctorId(Long doctorId) {
+        return calendarRepo.findByDoctorId(doctorId);
+    }
+
+    @Override
     @Scheduled(cron = "0 0 0 * * 0")
     public void modifyCalendar() {
         LocalDateTime currentDate = LocalDateTime.now();

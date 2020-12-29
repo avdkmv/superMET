@@ -1,9 +1,5 @@
 package com.unn.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-
 import com.unn.constants.Constant;
 import com.unn.model.NotificationEmail;
 

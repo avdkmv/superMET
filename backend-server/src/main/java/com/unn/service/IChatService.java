@@ -1,8 +1,9 @@
 package com.unn.service;
 
+import java.util.Optional;
+
 import com.unn.model.Chat;
 import com.unn.model.Message;
-import java.util.Optional;
 
 public interface IChatService {
     Optional<Chat> createChat(Chat chat);
@@ -13,4 +14,6 @@ public interface IChatService {
     Optional<Chat> deleteChat(Long chatId);
 
     Optional<Chat> newMessage(Long chatId, Message message);
+
+    void clearTable();
 }
