@@ -5,17 +5,25 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import com.unn.model.Appointment;
+import com.unn.model.NotificationEmail;
 import com.unn.repository.AppointmentRepo;
 import com.unn.service.IAppointmentService;
+import com.unn.util.RunnableSendEmail;
+
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AppointmentService implements IAppointmentService {
     // private final ValidationService validation;
-
+    private final JavaMailSender sender;
+    private final TaskScheduler taskScheduler;
     private final AppointmentRepo appointmentRepo;
 
     // private final DoctorRepo doctorRepo;
@@ -163,6 +171,16 @@ public class AppointmentService implements IAppointmentService {
                 a.setBusy(true);
                 a.setCode(UUID.randomUUID().toString());
                 appointmentRepo.save(appointment.get());
+
+                if (appointment.get().getPatient() != null) {
+                    NotificationEmail email = new NotificationEmail(
+                        "art8evd@gmail.com",
+                        "subject",
+                        "doctorName",
+                        appointment.get().getDate()
+                    );
+                    taskScheduler.schedule(new RunnableSendEmail(email, sender), appointment.get().getDate());
+                }
             }
         );
 
