@@ -211,4 +211,15 @@ public class AppointmentService implements IAppointmentService {
 
         return user.isPresent() ? appointment : Optional.empty();
     }
+
+    @Override
+    public void clearTable() {
+        appointmentRepo.deleteAll();
+    }
+
+    @Override
+    public Optional<List<Appointment>> findAll() {
+        return Optional.of(appointmentRepo.findAll());
+    }
+
 }

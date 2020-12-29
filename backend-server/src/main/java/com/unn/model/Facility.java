@@ -34,4 +34,9 @@ public class Facility {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Doctor> doctors;
+
+    public Facility(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

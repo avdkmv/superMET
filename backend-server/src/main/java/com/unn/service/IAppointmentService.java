@@ -27,4 +27,8 @@ public interface IAppointmentService {
 
     Optional<Appointment> newResult(Long appointmentId, Long documentId);
     Optional<Appointment> newResult(Long appointmentId, Long doctorId, Long patientId);
+
+    void clearTable();
+
+    Optional<List<Appointment>> findAll();
 }

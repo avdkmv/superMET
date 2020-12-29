@@ -5,11 +5,18 @@ import static org.junit.Assert.assertTrue;
 import java.util.Optional;
 import com.unn.constants.UserTypes;
 import com.unn.dto.SignupRequest;
+import com.unn.model.Doctor;
+import com.unn.model.Facility;
 import com.unn.model.User;
-import com.unn.repository.UserTypeRepo;
+import com.unn.repository.FacilityRepo;
+import com.unn.service.impl.AppointmentService;
+import com.unn.service.impl.CalendarService;
 import com.unn.service.impl.UserService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,33 +28,44 @@ public class UserControllerTest extends AbstractControllerTest {
     private UserService userService;
 
     @Autowired
-    private UserTypeRepo userTypeRepo;
+    private AppointmentService appointmentService;
 
-    private final Long userTypeId = UserTypes.PATIENT.getId();
+    @Autowired
+    private CalendarService calendarService;
+
+    @Autowired
+    private FacilityRepo facilityRepo;
+
     private final String username = "username";
     private final String password = "password";
     private final String mail = "mail";
-    private final User user = new User(userTypeRepo.getOne(userTypeId), username, password, mail);
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
-        userService.clearTable();
+        // TODO: fix cascade delete
+        appointmentService.clearTable();
+        calendarService.clearTable();
+        facilityRepo.deleteAll();
+        userService.clearUserTable();
     }
 
     @After
     public void tearDown() {
-        userService.clearTable();
+        appointmentService.clearTable();
+        calendarService.clearTable();
+        facilityRepo.deleteAll();
+        userService.clearUserTable();
     }
 
     @Test
-    public void getExistingUserByIdTest() throws Exception {
-        Optional<User> retUser = userService.createUser(
-            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
-        );
+    public void getExistingDoctorByIdTest() throws Exception {
+        SignupRequest signupRequest = new SignupRequest(UserTypes.DOCTOR.getId(), username, password, mail);
+        Optional<User> createdUser = userService.createUser(signupRequest);
+        Long id = createdUser.get().getId();
 
-        String url = "/user/" + retUser.get().getId();
+        String url = "/user/doctor/" + id;
         MvcResult mvcResult = mvc
             .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
             .andReturn();
@@ -56,15 +74,17 @@ public class UserControllerTest extends AbstractControllerTest {
         assertEquals(statusOK, status);
 
         String jsonObj = mvcResult.getResponse().getContentAsString();
-        User createdUser = mapFromJson(jsonObj, User.class);
-        assertEquals(createdUser.getUsername(), username);
-        assertEquals(createdUser.getPassword(), password);
-        assertEquals(createdUser.getMail(), mail);
+        JSONObject responseDoctor = new JSONObject(jsonObj);
+
+        assertEquals(username, responseDoctor.getString("username"));
+        assertEquals(password, responseDoctor.getString("password"));
+        assertEquals(mail, responseDoctor.getString("mail"));
+        assertEquals((Long)UserTypes.DOCTOR.getId(), (Long)((JSONObject)responseDoctor.get("type")).getLong("id"));
     }
 
     @Test
-    public void getNotExistingUserByIdTest() throws Exception {
-        String url = "/user/0";
+    public void getNotExistingDoctorByIdTest() throws Exception {
+        String url = "/user/doctor/0";
         MvcResult mvcResult = mvc
             .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
             .andReturn();
@@ -74,52 +94,108 @@ public class UserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void getExistingUserByMailTest() throws Exception {
-        Optional<User> retUser = userService.createUser(
-            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
-        );
+    public void getExistingPatientByIdTest() throws Exception {
+        SignupRequest signupRequest = new SignupRequest(UserTypes.PATIENT.getId(), username, password, mail);
+        Optional<User> createdUser = userService.createUser(signupRequest);
+        Long id = createdUser.get().getId();
 
-        String url = "/user/mail/" + retUser.get().getMail();
+        String url = "/user/patient/" + id;
         MvcResult mvcResult = mvc
-            .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
-            .andReturn();
+                .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
 
         String jsonObj = mvcResult.getResponse().getContentAsString();
-        User createdUser = mapFromJson(jsonObj, User.class);
-        assertEquals(createdUser.getUsername(), username);
-        assertEquals(createdUser.getPassword(), password);
-        assertEquals(createdUser.getMail(), mail);
+        JSONObject responsePatients = new JSONObject(jsonObj);
+
+        assertEquals(username, responsePatients.getString("username"));
+        assertEquals(password, responsePatients.getString("password"));
+        assertEquals(mail, responsePatients.getString("mail"));
+        assertEquals((Long)UserTypes.PATIENT.getId(), (Long)((JSONObject)responsePatients.get("type")).getLong("id"));
     }
 
     @Test
-    public void getNotExistingUserByMailTest() throws Exception {
-        String url = "/user/mail/no";
+    public void getNotExistingPatientByIdTest() throws Exception {
+        String url = "/user/patient/0";
         MvcResult mvcResult = mvc
-            .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
-            .andReturn();
+                .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusNOT_FOUND, status);
     }
 
     @Test
-    public void deleteExistingUserByIdTest() throws Exception {
-        Optional<User> retUser = userService.createUser(
-            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
-        );
+    public void signupDoctorTest() throws Exception {
+        SignupRequest signupRequest = new SignupRequest(UserTypes.DOCTOR.getId(), username, password, mail);
+        String url = "/user/signup";
+        String jsonToSend = super.mapToJson(signupRequest);
+        MvcResult mvcResult = mvc
+            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
+            .andReturn();
 
-        Long userId = retUser.get().getId();
-        String url = "/user/" + userId + "/delete";
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(statusCREATED, status);
+
+        Optional<User> retUser = userService.findUser(mail);
+        assertEquals(username, retUser.get().getUsername());
+        assertEquals(password, retUser.get().getPassword());
+        assertEquals(mail, retUser.get().getMail());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), retUser.get().getType().getId());
+    }
+
+    @Test
+    public void signupPatientTest() throws Exception {
+        SignupRequest signupRequest = new SignupRequest(UserTypes.PATIENT.getId(), username, password, mail);
+        String url = "/user/signup";
+        String jsonToSend = super.mapToJson(signupRequest);
+        MvcResult mvcResult = mvc
+                .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
+                .andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(statusCREATED, status);
+
+        Optional<User> retUser = userService.findUser(mail);
+        assertEquals(username, retUser.get().getUsername());
+        assertEquals(password, retUser.get().getPassword());
+        assertEquals(mail, retUser.get().getMail());
+        assertEquals((Long)UserTypes.PATIENT.getId(), retUser.get().getType().getId());
+    }
+
+    @Ignore
+    @Test
+    public void deleteExistingDoctorByIdTest() throws Exception {
+        SignupRequest signupRequest = new SignupRequest(UserTypes.DOCTOR.getId(), username, password, mail);
+        Optional<User> createdUser = userService.createUser(signupRequest);
+        Long id = createdUser.get().getId();
+
+        String url = "/user/" + id + "/delete";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(url)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
 
-        retUser = userService.findUser(userId);
-        assertTrue(retUser.isEmpty());
+        Optional<User> dbUser = userService.findUser(id);
+        assertTrue(dbUser.isEmpty());
+    }
+
+    @Test
+    public void deleteExistingPatientByIdTest() throws Exception {
+        SignupRequest signupRequest = new SignupRequest(UserTypes.PATIENT.getId(), username, password, mail);
+        Optional<User> createdUser = userService.createUser(signupRequest);
+        Long id = createdUser.get().getId();
+
+        String url = "/user/" + id + "/delete";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(url)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(statusOK, status);
+
+        Optional<User> dbUser = userService.findUser(id);
+        assertTrue(dbUser.isEmpty());
     }
 
     @Test
@@ -132,108 +208,54 @@ public class UserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void deleteExistingUserByMailTest() throws Exception {
-        Optional<User> retUser = userService.createUser(
-            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
-        );
+    public void getAllPatientsTest() throws Exception {
+        for (int i = 0; i < 3; i++) {
+            SignupRequest signupRequest = new SignupRequest(UserTypes.PATIENT.getId(), username + i,
+                    password + i, mail + i);
+            userService.createUser(signupRequest);
+        }
 
-        String userMail = retUser.get().getMail();
-        String url = "/user/mail/" + userMail + "/delete";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(url)).andReturn();
-
+        String url = "/user/patients";
+        MvcResult mvcResult = mvc
+                .perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
         int status = mvcResult.getResponse().getStatus();
         assertEquals(statusOK, status);
 
-        retUser = userService.findUser(userMail);
-        assertTrue(retUser.isEmpty());
+        String jsonObj = mvcResult.getResponse().getContentAsString();
+        JSONArray responsePatients = new JSONArray(jsonObj);
+
+        for (int i = 0; i < responsePatients.length(); i++) {
+            assertEquals(username + i, ((JSONObject)responsePatients.get(i)).getString("username"));
+            assertEquals(password + i, ((JSONObject)responsePatients.get(i)).getString("password"));
+            assertEquals(mail + i, ((JSONObject)responsePatients.get(i)).getString("mail"));
+            assertEquals((Long)UserTypes.PATIENT.getId(), (Long)((JSONObject)((JSONObject)responsePatients.get(i)).get("type")).getLong("id"));
+        }
     }
 
     @Test
-    public void deleteNotExistingUserByMailTest() throws Exception {
-        String url = "/user/mail/no/delete";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(url)).andReturn();
+    public void attachDoctorToFacilityTest() throws Exception {
+        Facility facility = new Facility("facility", "there_is_only_covid");
+        Long facilityId = facilityRepo.save(facility).getId();
 
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(statusNOT_FOUND, status);
-    }
+        SignupRequest signupRequest = new SignupRequest(UserTypes.DOCTOR.getId(), username, password, mail);
+        Optional<User> createdUser = userService.createUser(signupRequest);
+        Long userId = createdUser.get().getId();
 
-    @Test
-    public void registrationTest() throws Exception {
-        String url = "/user/registration";
-        String jsonToSend = super.mapToJson(user);
+        String url = "/user/doctor/" + userId + "/facility/" + facilityId;
         MvcResult mvcResult = mvc
-            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
-            .andReturn();
-
+                .perform(MockMvcRequestBuilders.post(url).accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
         int status = mvcResult.getResponse().getStatus();
-        assertEquals(statusOK, status);
+        assertEquals(statusCREATED, status);
 
-        Optional<User> retUser = userService.findUser(user.getMail());
-        assertEquals(retUser.get().getUsername(), username);
-        assertEquals(retUser.get().getPassword(), password);
-        assertEquals(retUser.get().getMail(), mail);
+        Optional<Doctor> dbDoctor = userService.getDoctor(userId);
+
+        assertEquals(username, dbDoctor.get().getUsername());
+        assertEquals(password, dbDoctor.get().getPassword());
+        assertEquals(mail, dbDoctor.get().getMail());
+        assertEquals(facilityId, dbDoctor.get().getFacility().getId());
+        assertEquals((Long)UserTypes.DOCTOR.getId(), dbDoctor.get().getType().getId());
     }
 
-    @Test
-    public void registrationNotValidUserTest() throws Exception {
-        String url = "/user/registration";
-        User notValidUser = user;
-        notValidUser.setType(null);
-        String jsonToSend = super.mapToJson(notValidUser);
-        MvcResult mvcResult = mvc
-            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
-            .andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(statusBAD_REQUEST, status);
-    }
-
-    @Test
-    public void editTest() throws Exception {
-        Optional<User> retUser = userService.createUser(
-            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
-        );
-        final String usernameUpd = "usernameUpd";
-        final String passwordUpd = "passwordUpd";
-        User editUser = retUser.get();
-        editUser.setUsername(usernameUpd);
-        editUser.setPassword(passwordUpd);
-
-        String url = "/user/edit";
-        String jsonToSend = super.mapToJson(editUser);
-        MvcResult mvcResult = mvc
-            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
-            .andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(statusOK, status);
-
-        Optional<User> retEditUser = userService.findUser(retUser.get().getId());
-        assertEquals(retEditUser.get().getUsername(), usernameUpd);
-        assertEquals(retEditUser.get().getPassword(), passwordUpd);
-        assertEquals(retEditUser.get().getMail(), mail);
-    }
-
-    @Test
-    public void editNotValidUserTest() throws Exception {
-        Optional<User> retUser = userService.createUser(
-            new SignupRequest(user.getType().getId(), user.getUsername(), user.getPassword(), user.getMail())
-        );
-        final String usernameUpd = "usernameUpd";
-        final String passwordUpd = "passwordUpd";
-        final String mailUpd = "mailUpd";
-        User editUser = retUser.get();
-        editUser.setUsername(usernameUpd);
-        editUser.setPassword(passwordUpd);
-        editUser.setMail(mailUpd);
-
-        String url = "/user/edit";
-        String jsonToSend = super.mapToJson(editUser);
-        MvcResult mvcResult = mvc
-            .perform(MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(jsonToSend))
-            .andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(statusBAD_REQUEST, status);
-    }
 }
