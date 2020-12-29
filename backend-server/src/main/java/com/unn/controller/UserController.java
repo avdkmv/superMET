@@ -101,9 +101,9 @@ public class UserController {
 
     @GetMapping("/patients")
     public ResponseEntity<List<User>> getAllPatients() {
-        Optional<List<User>> doctors = userService.getAllByType(UserTypes.PATIENT);
-        if (doctors.isPresent()) {
-            return ResponseEntity.ok(doctors.get());
+        Optional<List<User>> patients = userService.getAllByType(UserTypes.PATIENT);
+        if (patients.isPresent()) {
+            return ResponseEntity.ok(patients.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

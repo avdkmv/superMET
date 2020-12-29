@@ -152,7 +152,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void clearTable() {
+    public void clearUserTable() {
         userRepo.deleteAll();
     }
 
