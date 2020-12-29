@@ -1,6 +1,7 @@
 package com.unn.service;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 
@@ -65,6 +66,7 @@ public class CalendarServiceTest {
         Optional<Calendar> calendarFromRepo = calendarService.findCalendar(doctor.getCalendar().getId());
 
         assertTrue(calendarFromRepo.isPresent());
+        assertEquals(doctor.getCalendar(), calendarFromRepo.get());
     }
 
     @Test
