@@ -2,6 +2,7 @@ package com.unn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /*
  * killing work on 8080
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * taskkill /PID typeyourPIDhere /F
  */
 
+@EnableAsync
 @SpringBootApplication
 public class Application {
 

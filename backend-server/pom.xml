@@ -62,6 +62,12 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+         <!-- Email -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>2.4.1</version>
+        </dependency>
         <!-- JPA Data -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
