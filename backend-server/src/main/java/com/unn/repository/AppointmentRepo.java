@@ -1,9 +1,10 @@
 package com.unn.repository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import com.unn.model.Appointment;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

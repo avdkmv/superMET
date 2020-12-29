@@ -1,26 +1,37 @@
 package com.unn.service.impl;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
 import com.unn.dto.DayResponse;
 import com.unn.model.Appointment;
+import com.unn.model.NotificationEmail;
 import com.unn.model.Patient;
 import com.unn.model.User;
 import com.unn.repository.AppointmentRepo;
 import com.unn.service.IAppointmentService;
 import com.unn.util.AuthUtils;
+import com.unn.util.RunnableSendEmail;
+
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AppointmentService implements IAppointmentService {
     private final AppointmentRepo appointmentRepo;
+    private final JavaMailSender sender;
+    private final TaskScheduler taskScheduler;
     private final UserService users;
 
     @Override
@@ -130,7 +141,7 @@ public class AppointmentService implements IAppointmentService {
             return Optional.empty();
         }
 
-        User user = (User)auth.getPrincipal();
+        User user = (User) auth.getPrincipal();
         return appointmentRepo.findAllByPatientIdAndBusy(user.getId(), busy);
     }
 
@@ -204,6 +215,19 @@ public class AppointmentService implements IAppointmentService {
                         a.setCode(UUID.randomUUID().toString());
                         a.setPatient(u);
                         appointmentRepo.save(appointment.get());
+
+                        if (appointment.get().getPatient() != null) {
+                            NotificationEmail email = new NotificationEmail(
+                                appointment.get().getPatient().getMail(),
+                                "Appointment notification",
+                                appointment.get().getDoctor().getUsername(),
+                                appointment.get().getDate()
+                            );
+                            taskScheduler.schedule(
+                                new RunnableSendEmail(email, sender),
+                                Date.from(appointment.get().getDate().atZone(ZoneId.systemDefault()).toInstant())
+                            );
+                        }
                     }
                 );
             }
