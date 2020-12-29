@@ -1,11 +1,11 @@
 package com.unn.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import com.unn.dto.LoginRequest;
 import com.unn.dto.SignupRequest;
 import com.unn.model.User;
 import com.unn.security.SecurityService;
 import com.unn.service.impl.ResponseService;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
